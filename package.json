@@ -1,0 +1,31 @@
+{
+	"name": "SwimBackend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"dependencies": {
+		"apollo-server-express": "^2.4.8",
+		"bcryptjs": "^2.4.3",
+		"cookie-parser": "^1.4.4",
+		"dotenv": "^7.0.0",
+		"express": "^4.16.4",
+		"jsonwebtoken": "^8.5.1",
+		"nodemon": "^1.18.11",
+		"prisma": "^1.30.1"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/shhhquiet/ESS-Backend.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/shhhquiet/ESS-Backend/issues"
+	},
+	"homepage": "https://github.com/shhhquiet/ESS-Backend#readme"
+}
