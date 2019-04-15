@@ -1,21 +1,29 @@
 {
-	"name": "SwimBackend",
+	"name": "ess-backend",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
+		"apollo-server": "^2.4.8",
 		"apollo-server-express": "^2.4.8",
 		"bcryptjs": "^2.4.3",
 		"cookie-parser": "^1.4.4",
 		"dotenv": "^7.0.0",
 		"express": "^4.16.4",
+		"graphql-import": "^0.7.1",
+		"http": "0.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"nodemon": "^1.18.11",
-		"prisma": "^1.30.1"
+		"prisma": "^1.30.1",
+		"prisma-binding": "^2.3.10",
+		"prisma-client-lib": "^1.30.1"
 	},
 	"devDependencies": {},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "nodemon index.js",
+		"dev": "NODE_ENV=development nodemon -e js,graphql -x node --inspect index.js",
+		"deploy": "prisma deploy --env-file .env",
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",

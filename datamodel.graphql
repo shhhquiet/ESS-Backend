@@ -1,0 +1,103 @@
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  FRONT_DESK
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum LessonType {
+  TWO_ON_ONE
+  ONE_ON_ONE
+}
+
+enum Day {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+type Instructor {
+  id: ID! @unique
+  email: String! @unique
+  phone: String! @unique
+  firstName: String!
+  lastName: String!
+  gender: Gender!
+  address: String!
+  city: String!
+  state: String!
+  zip: Int!
+  bio: String!
+  role: Role!
+  imageURL: String!
+  startDate: DateTime!
+  currentEmployee: Boolean! default(value: true)
+  clients: [Client]
+  classes: [Class]
+  lessons: [Lesson]
+  openLessons: [Lesson]
+  createdAt: DateTime! 
+  updatedAt: DateTime!
+}
+
+type MedicalCondition {
+  id: ID! @unique
+  description: String!
+  student: [Student] @relation(type: "StudentMedical")
+  # instructor: [Instructor] @relation(type: "InstructorMedical")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Class {
+  id: ID! @unique
+  name: String!
+  description: String!
+  ageGroup: AgeGroup!
+  level: SkillLevel
+  capacity: Int!
+  price: Int!
+  day: Day!
+  instructor: Instructor!
+  duration: Int!
+  students: [Student!]!
+  time: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Lesson {
+  id: ID! @unique
+  name: String!
+  description: String!
+  instructor: Instructor! @relation(name: "LessonInstructor")
+  duration: Int!
+  calendarColor: Color!
+  price: Int!
+  day: Day!
+  time: DateTime!
+  open: Boolean!
+}
+
+type AgeGroup {
+  id: ID! @unique
+  minAge: Int!
+  maxAge: Int!
+  level: SkillLevel
+  instructors: [Instructor!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
