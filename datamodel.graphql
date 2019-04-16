@@ -29,9 +29,23 @@ enum Day {
   FRIDAY
   SATURDAY
 }
+
+enum Color {
+  RED
+  BLUE
+  BLACK
+  PURPLE
+  PINK
+  GREEN
+  ORANGE
+  GREY
+  YELLOW
+}
+
 type Instructor {
   id: ID! @unique
   email: String! @unique
+  password: String!
   phone: String! @unique
   firstName: String!
   lastName: String!
@@ -45,10 +59,10 @@ type Instructor {
   imageURL: String!
   startDate: DateTime!
   currentEmployee: Boolean! default(value: true)
-  clients: [Client]
+  clients: [Client!]!
   classes: [Class]
   lessons: [Lesson]
-  openLessons: [Lesson]
+  # openLessons: [Lesson]
   createdAt: DateTime! 
   updatedAt: DateTime!
 }
@@ -67,12 +81,12 @@ type Class {
   name: String!
   description: String!
   ageGroup: AgeGroup!
-  level: SkillLevel
+  level: SkillLevel!
   capacity: Int!
   price: Int!
   day: Day!
-  instructor: Instructor!
-  duration: Int!
+  instructor: Instructor! # can there be multiple instructors for a class?
+  duration: Int! # 30 45 or 60 min
   students: [Student!]!
   time: DateTime!
   createdAt: DateTime!
@@ -97,7 +111,11 @@ type AgeGroup {
   minAge: Int!
   maxAge: Int!
   level: SkillLevel
-  instructors: [Instructor!]!
+  instructors: [Instructor!]! #assuming there are multiple instructors per age group
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Student {
+  
 }

@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+const userObject = `{
+  id
+  firstName
+  lastName
+  email
+}`;
+
 module.exports = {
 	isAuth: async function(req, res, next) {
 		const { token } = req.cookies;
