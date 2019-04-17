@@ -42,8 +42,46 @@ enum Color {
   YELLOW
 }
 
+interface Employee {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  phone: String! @unique
+  firstName: String!
+  lastName: String!
+  gender: Gender!
+  address: String!
+  city: String!
+  state: String!
+  zip: Int!
+  role: Role!
+  startDate: DateTime!
+  currentEmployee: Boolean! default(value: true)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
 
-type Instructor {
+type FrontDesk implements Employee {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  phone: String! @unique
+  firstName: String!
+  lastName: String!
+  gender: Gender!
+  address: String!
+  city: String!
+  state: String!
+  zip: Int!
+  role: Role!
+  startDate: DateTime!
+  currentEmployee: Boolean! default(value: true)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+
+type Instructor implements Employee {
   id: ID! @id
   email: String! @unique
   password: String!
@@ -127,7 +165,7 @@ type Child {
   classes: [Class!]!
   lessons: [Lesson!]!
   gender: Gender!
-  medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
+  medical: [MedicalCondition!]! # generic medical can be used for multiple students?
   parent: AccountAdmin!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -152,7 +190,7 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
   updatedAt: DateTime! @updatedAt
 }
 
-union User = AccountAdmin | Instructor
+union User = AccountAdmin | Instructor | FrontDesk
 
 union Customer = AccountAdmin | Child # makes it so we can find Parents/Children in one single query
 
