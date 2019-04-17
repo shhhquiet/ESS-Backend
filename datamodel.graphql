@@ -16,8 +16,8 @@ enum SkillLevel {
 }
 
 enum LessonType {
-  TWO_ON_ONE
-  ONE_ON_ONE
+  _2on1
+  _1on1
 }
 
 enum Day {
@@ -42,8 +42,9 @@ enum Color {
   YELLOW
 }
 
+
 type Instructor {
-  id: ID! @unique
+  id: ID! @id
   email: String! @unique
   password: String!
   phone: String! @unique
@@ -62,22 +63,22 @@ type Instructor {
   clients: [Client!]!
   classes: [Class]
   lessons: [Lesson]
-  # openLessons: [Lesson]
-  createdAt: DateTime! 
-  updatedAt: DateTime!
+  # workDays: [Day] # a way to track what days of the week someone normally works? or we can make a separate type
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type MedicalCondition {
-  id: ID! @unique
+  id: ID! @id
   description: String!
   student: [Student] @relation(type: "StudentMedical")
   # instructor: [Instructor] @relation(type: "InstructorMedical")
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Class {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   description: String!
   ageGroup: AgeGroup!
@@ -88,13 +89,13 @@ type Class {
   instructor: Instructor! # can there be multiple instructors for a class?
   duration: Int! # 30 45 or 60 min
   students: [Student!]!
-  time: DateTime!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  time: DateTime! # may want to make this one be a string, not sure
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Lesson {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   description: String!
   instructor: Instructor! @relation(name: "LessonInstructor")
@@ -107,15 +108,52 @@ type Lesson {
 }
 
 type AgeGroup {
-  id: ID! @unique
+  id: ID! @id
   minAge: Int!
   maxAge: Int!
   level: SkillLevel
   instructors: [Instructor!]! #assuming there are multiple instructors per age group
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
-type Student {
-  
+type Child {
+  id: ID! @id
+  firstName: String!
+  lastName: String!
+  birthday: String!
+  skill: SkillLevel!
+  ageGroup: AgeGroup!
+  classes: [Class!]!
+  lessons: [Lesson!]!
+  gender: Gender!
+  medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
+  parent: AccountAdmin!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
+
+type AccountAdmin { # for parents since they'll have control over payments, etc.
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  firstName: String!
+  lastName: String!
+  phone: String # not sure if we want for Parents or not
+  address: String!
+  city: String!
+  state: String!
+  zip: Int!
+  dependants: [Child!]! @relation(link: INLINE)
+  stripeId: String # if we use stripe for charges
+  resetToken: String
+  resetTokenExpiry: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+union User = AccountAdmin | Instructor
+
+union Customer = AccountAdmin | Child # makes it so we can find Parents/Children in one single query
+
+union Instruction = Lesson | Class # we can search for all classes and lessons in one query instead of two
