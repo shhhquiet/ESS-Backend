@@ -1,10 +1,9 @@
 const { extractFragmentReplacements } = require('prisma-binding');
 
 const resolvers = {
-	Query: require('./Query'),
-	Mutation: require('./Mutation'),
-	// Subscription: require('./Subscription'),
-	Node: require('./Node')
+	Query: require('./query'),
+	Mutation: require('./mutation'),
+	Node: require('./node')
 };
 
 module.exports = {
