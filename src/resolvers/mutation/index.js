@@ -42,14 +42,11 @@ module.exports = {
 	async signin(parent, { email, password }, { query, res }, info) {
 		const user = await query.user({ where: { email } });
 
-		if (!user) {
-			throw new Error(`No such user found for email ${email}`);
-		}
+		if (!user) throw new Error(`No such user found for email ${email}`);
 
 		const valid = await bcrypt.compare(password, user.password);
-		if (!valid) {
-			throw new Error('Invalid Password!');
-		}
+
+		if (!valid) throw new Error('Invalid Password!');
 
 		const token = await jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 
@@ -96,23 +93,23 @@ module.exports = {
 		return { message: 'Thanks!' };
 	},
 	async resetPassword(parent, args, { query, mutation, res }, info) {
-		if (args.password !== args.confirmPassword) {
-			throw new Error('Passwords must match!');
-		}
+		const { password, confirmPassword, resetToken } = args;
+		if (password !== confirmPassword) throw new Error('Passwords must match!');
+
 		const [user] = await query.users({
 			where: {
-				resetToken: args.resetToken,
+				resetToken: resetToken,
 				resetTokenExpiry_gte: Date.now() - 3600000 // make sure token is within 1hr limit
 			}
 		});
 		if (!user) throw new Error('This token is either invalid or expired');
 
-		const password = await bcrypt.hash(args.password, 10);
+		const updatedPass = await bcrypt.hash(password, 10);
 		// removed token and expiry fields from user once updated
 		const updatedUser = await mutation.updateUser({
 			where: { email: user.email },
 			data: {
-				password,
+				password: updatedPass,
 				resetToken: null,
 				resetTokenExpiry: null
 			}
@@ -124,19 +121,19 @@ module.exports = {
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 			domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
 		});
+
 		return updatedUser;
 	},
 	async internalPasswordReset(parent, args, { user, res, mutation }, info) {
+		const { newPassword1, newPassword2, oldPassword } = args;
 		if (!user) throw new Error('You must be logged in!');
 
-		if (args.newPassword1 !== args.newPassword2) {
-			throw new Error('New passwords must match!');
-		}
+		if (newPassword1 !== newPassword2) throw new Error('New passwords must match!');
 
-		// compare oldpassword to password from user object
-		const samePassword = await bcrypt.compare(args.oldPassword, user.password);
+		// compare oldpassword to password from user
+		const samePassword = await bcrypt.compare(oldPassword, user.password);
 		if (!samePassword) throw new Error('Incorrect password, please try again.');
-		const newPassword = await bcrypt.hash(args.newPassword1, 10);
+		const newPassword = await bcrypt.hash(newPassword1, 10);
 
 		// update password
 		const updatedUser = await mutation.updateUser({
@@ -152,6 +149,7 @@ module.exports = {
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 			domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
 		});
+
 		return updatedUser;
 	}
 };
