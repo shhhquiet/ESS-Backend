@@ -42,6 +42,8 @@ enum Color {
   YELLOW
 }
 
+# the datamodel uses the new Prisma 1.31 syntax just so people aren't confused
+
 interface Employee {
   id: ID! @id
   email: String! @unique

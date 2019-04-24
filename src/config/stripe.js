@@ -15,7 +15,7 @@ const createPlan = async (name, interval, amount) => {
 	const plan = await stripe.plans.create({
 		// product: 'prod_EnmdNIvok3JOk2',
 		// product: 'prod_Eno6M8G6y4gbr3',
-		product: 'prod_Enp6VhVj6lPWfC',
+		// product: 'prod_Enp6VhVj6lPWfC',
 		nickname: name,
 		currency: 'usd',
 		interval,
