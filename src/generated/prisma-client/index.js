@@ -37,11 +37,7 @@ var models = [
     embedded: false
   },
   {
-    name: "FrontDesk",
-    embedded: false
-  },
-  {
-    name: "Instructor",
+    name: "Employee",
     embedded: false
   },
   {

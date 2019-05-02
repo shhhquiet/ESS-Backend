@@ -90,7 +90,7 @@ type Employee {
 	state: String!
 	zip: Int!
 	bio: String!
-	role: [Role]
+	role: [Role] @scalarList(strategy: RELATION)
 	imageURL: String!
 	startDate: DateTime!
 	currentEmployee: Boolean!
@@ -150,7 +150,6 @@ type AgeGroup {
 	updatedAt: DateTime! @updatedAt
 }
 
-union User = AccountAdmin | Student | Employee 
+union User = AccountAdmin | Student | Employee
 union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
 union Instruction = Lesson | Class # we can search for all classes and lessons in one query instead of two
-
