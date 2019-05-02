@@ -10,12 +10,16 @@ const userObject = `{
 module.exports = {
 	isAuth: async function(req, res, next) {
 		const { token } = req.cookies;
-
+	
 		if (token) {
+			try {
 			const { userId } = jwt.verify(token, process.env.APP_SECRET);
 			req.userId = userId;
+			
+			} catch(e) {
+				next(e)
+			}
 		}
-
 		next();
 	},
 
@@ -30,10 +34,12 @@ module.exports = {
 	},
 
 	errorHandler: function(err, req, res, next) {
+		console.log(err)
 		if (res.headersSent) {
 			return next(err);
 		}
-		const { status } = err;
+		
+		status = err.status || 500
 		res.status(status).json(err);
 	}
 };
