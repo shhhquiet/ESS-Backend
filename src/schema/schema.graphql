@@ -3,23 +3,23 @@
 type Mutation {
   signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
 	signin(email: String!, password: String!): User!
-	requestReset(email: String!): Message
+	requestReset(email: String!): String
 	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
-	signout: Message
+	signout: String
 
 }
 
 type Query {
-  instructors: Instructor
+  instructors: [Instructor]
 }
 
 
 type Instructor {
-	id: ID! @id
-	email: String! @unique
+	id: ID!
+	email: String! 
 	password: String!
-	phone: String! @unique
+	phone: String! 
 	firstName: String!
 	lastName: String!
 	gender: Gender!
@@ -35,21 +35,39 @@ type Instructor {
 	clients: [Student!]!
 	classes: [Class]
 	lessons: [Lesson]
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
+}
+
+type FrontDesk {
+	id: ID! 
+	email: String! 
+	password: String!
+	phone: String!
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	role: Role!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
 }
 
 type MedicalCondition {
-  id: ID! @unique
+  id: ID! 
   description: String!
-  student: [Student] @relation(type: "StudentMedical")
-  # instructor: [Instructor] @relation(type: "InstructorMedical")
+  student: [Student] 
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type Class {
-  id: ID! @unique
+  id: ID! 
   name: String!
   description: String!
   ageGroup: AgeGroup!
@@ -66,7 +84,7 @@ type Class {
 }
 
 type Lesson {
-  id: ID! @unique
+  id: ID! 
   name: String!
   description: String!
   instructor: Instructor! 
@@ -89,24 +107,23 @@ type AgeGroup {
 }
 
 type Student {
-	id: ID! @id
-	firstName: String!
-	lastName: String!
-	birthday: String!
-	skill: SkillLevel!
-	ageGroup: AgeGroup!
-	classes: [Class!]!
-	lessons: [Lesson!]!
-	gender: Gender!
-	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
-	admin: AccountAdmin @relation(link: INLINE)
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
+  id: ID! 
+  firstName: String!
+  lastName: String!
+  birthday: String!
+  skill: SkillLevel!
+  ageGroup: AgeGroup!
+  classes: [Class!]!
+  lessons: [Lesson!]!
+  gender: Gender!
+  medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type AccountAdmin { # for parents since they'll have control over payments, etc.
-	id: ID! @id
-	email: String! @unique
+	id: ID! 
+	email: String! 
 	password: String!
 	firstName: String!
 	lastName: String!
@@ -119,6 +136,10 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
 	stripeId: String # if we use stripe for charges
 	resetToken: String
 	resetTokenExpiry: String
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
 }
+
+union User = AccountAdmin | Student | Instructor | FrontDesk
+union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
+union Instruction = Lesson | Class #
