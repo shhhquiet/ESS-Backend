@@ -11,33 +11,32 @@ type Mutation {
 }
 
 type Query {
-
+  instructors: Instructor
 }
 
 
 type Instructor {
-  id: ID! 
-  email: String! 
-  password: String!
-  phone: String! 
-  firstName: String!
-  lastName: String!
-  gender: Gender!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  bio: String!
-  role: Role!
-  imageURL: String!
-  startDate: DateTime!
-  currentEmployee: Boolean! default(value: true)
-  clients: [Client!]!
-  classes: [Class]
-  lessons: [Lesson]
-  # workDays: [Day] # a way to track what days of the week someone normally works? or we can make a separate type
-  createdAt: DateTime! 
-  updatedAt: DateTime!
+	id: ID! @id
+	email: String! @unique
+	password: String!
+	phone: String! @unique
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	bio: String!
+	role: Role!
+	imageURL: String!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	clients: [Student!]!
+	classes: [Class]
+	lessons: [Lesson]
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type MedicalCondition {
@@ -89,34 +88,37 @@ type AgeGroup {
   updatedAt: DateTime!
 }
 
-type Child {
-  id: ID! 
-  firstName: String!
-  lastName: String!
-  birthday: String!
-  skill: SkillLevel!
-  ageGroup: AgeGroup!
-  classes: [Class!]!
-  lessons: [Lesson!]!
-  gender: Gender!
-  medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
-  createdAt: DateTime!
-  updatedAt: DateTime!
+type Student {
+	id: ID! @id
+	firstName: String!
+	lastName: String!
+	birthday: String!
+	skill: SkillLevel!
+	ageGroup: AgeGroup!
+	classes: [Class!]!
+	lessons: [Lesson!]!
+	gender: Gender!
+	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
+	admin: AccountAdmin @relation(link: INLINE)
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type AccountAdmin { # for parents since they'll have control over payments, etc.
-  id: ID! 
-  email: String! 
-  password: String!
-  firstName: String!
-  lastName: String!
-  phone: String # not sure if we want for Parents or not
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  dependants: [Child!]
-  stripeId: String # if we use stripe for charges
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID! @id
+	email: String! @unique
+	password: String!
+	firstName: String!
+	lastName: String!
+	phone: String!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	students: [Student!]!
+	stripeId: String # if we use stripe for charges
+	resetToken: String
+	resetTokenExpiry: String
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
