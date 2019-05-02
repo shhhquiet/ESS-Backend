@@ -13,10 +13,10 @@
 		"graphql-import": "^0.7.1",
 		"http": "0.0.0",
 		"jsonwebtoken": "^8.5.1",
-		"nodemon": "^1.18.11",
-		"prisma": "^1.31.1",
+		"nodemon": "^1.19.0",
+		"prisma": "^1.32.0",
 		"prisma-binding": "^2.3.10",
-		"prisma-client-lib": "^1.31.1"
+		"prisma-client-lib": "^1.32.0"
 	},
 	"devDependencies": {},
 	"scripts": {
