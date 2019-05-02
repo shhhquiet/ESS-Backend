@@ -1,5 +1,5 @@
 # source: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
-# timestamp: Wed May 01 2019 22:36:41 GMT-0500 (Central Daylight Time)
+# timestamp: Wed May 01 2019 22:40:13 GMT-0500 (Central Daylight Time)
 
 type AccountAdmin implements Node {
   id: ID!
@@ -12,7 +12,7 @@ type AccountAdmin implements Node {
   city: String!
   state: String!
   zip: Int!
-  children(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
+  students(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
@@ -44,15 +44,15 @@ input AccountAdminCreateInput {
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
-  children: StudentCreateManyWithoutParentInput
+  students: StudentCreateManyWithoutAdminInput
 }
 
-input AccountAdminCreateOneWithoutChildrenInput {
-  create: AccountAdminCreateWithoutChildrenInput
+input AccountAdminCreateOneWithoutStudentsInput {
+  create: AccountAdminCreateWithoutStudentsInput
   connect: AccountAdminWhereUniqueInput
 }
 
-input AccountAdminCreateWithoutChildrenInput {
+input AccountAdminCreateWithoutStudentsInput {
   id: ID
   email: String!
   password: String!
@@ -180,7 +180,7 @@ input AccountAdminUpdateInput {
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
-  children: StudentUpdateManyWithoutParentInput
+  students: StudentUpdateManyWithoutAdminInput
 }
 
 input AccountAdminUpdateManyMutationInput {
@@ -198,16 +198,16 @@ input AccountAdminUpdateManyMutationInput {
   resetTokenExpiry: String
 }
 
-input AccountAdminUpdateOneWithoutChildrenInput {
-  create: AccountAdminCreateWithoutChildrenInput
+input AccountAdminUpdateOneWithoutStudentsInput {
+  create: AccountAdminCreateWithoutStudentsInput
   connect: AccountAdminWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: AccountAdminUpdateWithoutChildrenDataInput
-  upsert: AccountAdminUpsertWithoutChildrenInput
+  update: AccountAdminUpdateWithoutStudentsDataInput
+  upsert: AccountAdminUpsertWithoutStudentsInput
 }
 
-input AccountAdminUpdateWithoutChildrenDataInput {
+input AccountAdminUpdateWithoutStudentsDataInput {
   email: String
   password: String
   firstName: String
@@ -222,9 +222,9 @@ input AccountAdminUpdateWithoutChildrenDataInput {
   resetTokenExpiry: String
 }
 
-input AccountAdminUpsertWithoutChildrenInput {
-  update: AccountAdminUpdateWithoutChildrenDataInput!
-  create: AccountAdminCreateWithoutChildrenInput!
+input AccountAdminUpsertWithoutStudentsInput {
+  update: AccountAdminUpdateWithoutStudentsDataInput!
+  create: AccountAdminCreateWithoutStudentsInput!
 }
 
 input AccountAdminWhereInput {
@@ -782,9 +782,9 @@ input AccountAdminWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  children_every: StudentWhereInput
-  children_some: StudentWhereInput
-  children_none: StudentWhereInput
+  students_every: StudentWhereInput
+  students_some: StudentWhereInput
+  students_none: StudentWhereInput
 }
 
 input AccountAdminWhereUniqueInput {
@@ -5478,14 +5478,13 @@ type Student implements Node {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroup!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   gender: Gender!
   medical(where: MedicalConditionWhereInput, orderBy: MedicalConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MedicalCondition!]
-  parent: AccountAdmin
+  admin: AccountAdmin
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -5505,18 +5504,22 @@ input StudentCreateInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   lessons: LessonCreateManyWithoutClientInput
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateManyInput {
   create: [StudentCreateInput!]
+  connect: [StudentWhereUniqueInput!]
+}
+
+input StudentCreateManyWithoutAdminInput {
+  create: [StudentCreateWithoutAdminInput!]
   connect: [StudentWhereUniqueInput!]
 }
 
@@ -5535,9 +5538,17 @@ input StudentCreateManyWithoutMedicalInput {
   connect: [StudentWhereUniqueInput!]
 }
 
-input StudentCreateManyWithoutParentInput {
-  create: [StudentCreateWithoutParentInput!]
-  connect: [StudentWhereUniqueInput!]
+input StudentCreateWithoutAdminInput {
+  id: ID
+  firstName: String!
+  lastName: String!
+  birthday: String!
+  skill: SkillLevel!
+  gender: Gender!
+  ageGroup: AgeGroupCreateOneInput!
+  classes: ClassCreateManyWithoutStudentsInput
+  lessons: LessonCreateManyWithoutClientInput
+  medical: MedicalConditionCreateManyWithoutStudentInput
 }
 
 input StudentCreateWithoutClassesInput {
@@ -5545,13 +5556,12 @@ input StudentCreateWithoutClassesInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   ageGroup: AgeGroupCreateOneInput!
   lessons: LessonCreateManyWithoutClientInput
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateWithoutLessonsInput {
@@ -5559,13 +5569,12 @@ input StudentCreateWithoutLessonsInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateWithoutMedicalInput {
@@ -5573,27 +5582,12 @@ input StudentCreateWithoutMedicalInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   lessons: LessonCreateManyWithoutClientInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
-}
-
-input StudentCreateWithoutParentInput {
-  id: ID
-  firstName: String!
-  lastName: String!
-  birthday: String!
-  zip: Int!
-  skill: SkillLevel!
-  gender: Gender!
-  ageGroup: AgeGroupCreateOneInput!
-  classes: ClassCreateManyWithoutStudentsInput
-  lessons: LessonCreateManyWithoutClientInput
-  medical: MedicalConditionCreateManyWithoutStudentInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 """An edge in a connection."""
@@ -5614,8 +5608,6 @@ enum StudentOrderByInput {
   lastName_DESC
   birthday_ASC
   birthday_DESC
-  zip_ASC
-  zip_DESC
   skill_ASC
   skill_DESC
   gender_ASC
@@ -5631,7 +5623,6 @@ type StudentPreviousValues {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   createdAt: DateTime!
@@ -5807,28 +5798,6 @@ input StudentScalarWhereInput {
 
   """All values not ending with the given string."""
   birthday_not_ends_with: String
-  zip: Int
-
-  """All values that are not equal to given value."""
-  zip_not: Int
-
-  """All values that are contained in given list."""
-  zip_in: [Int!]
-
-  """All values that are not contained in given list."""
-  zip_not_in: [Int!]
-
-  """All values less than the given value."""
-  zip_lt: Int
-
-  """All values less than or equal the given value."""
-  zip_lte: Int
-
-  """All values greater than the given value."""
-  zip_gt: Int
-
-  """All values greater than or equal the given value."""
-  zip_gte: Int
   skill: SkillLevel
 
   """All values that are not equal to given value."""
@@ -5938,35 +5907,32 @@ input StudentUpdateDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateManyDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
 }
@@ -5987,9 +5953,20 @@ input StudentUpdateManyMutationInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
+}
+
+input StudentUpdateManyWithoutAdminInput {
+  create: [StudentCreateWithoutAdminInput!]
+  connect: [StudentWhereUniqueInput!]
+  set: [StudentWhereUniqueInput!]
+  disconnect: [StudentWhereUniqueInput!]
+  delete: [StudentWhereUniqueInput!]
+  update: [StudentUpdateWithWhereUniqueWithoutAdminInput!]
+  updateMany: [StudentUpdateManyWithWhereNestedInput!]
+  deleteMany: [StudentScalarWhereInput!]
+  upsert: [StudentUpsertWithWhereUniqueWithoutAdminInput!]
 }
 
 input StudentUpdateManyWithoutClassesInput {
@@ -6028,78 +6005,67 @@ input StudentUpdateManyWithoutMedicalInput {
   upsert: [StudentUpsertWithWhereUniqueWithoutMedicalInput!]
 }
 
-input StudentUpdateManyWithoutParentInput {
-  create: [StudentCreateWithoutParentInput!]
-  connect: [StudentWhereUniqueInput!]
-  set: [StudentWhereUniqueInput!]
-  disconnect: [StudentWhereUniqueInput!]
-  delete: [StudentWhereUniqueInput!]
-  update: [StudentUpdateWithWhereUniqueWithoutParentInput!]
-  updateMany: [StudentUpdateManyWithWhereNestedInput!]
-  deleteMany: [StudentScalarWhereInput!]
-  upsert: [StudentUpsertWithWhereUniqueWithoutParentInput!]
-}
-
 input StudentUpdateManyWithWhereNestedInput {
   where: StudentScalarWhereInput!
   data: StudentUpdateManyDataInput!
+}
+
+input StudentUpdateWithoutAdminDataInput {
+  firstName: String
+  lastName: String
+  birthday: String
+  skill: SkillLevel
+  gender: Gender
+  ageGroup: AgeGroupUpdateOneRequiredInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  lessons: LessonUpdateManyWithoutClientInput
+  medical: MedicalConditionUpdateManyWithoutStudentInput
 }
 
 input StudentUpdateWithoutClassesDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
   ageGroup: AgeGroupUpdateOneRequiredInput
   lessons: LessonUpdateManyWithoutClientInput
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithoutLessonsDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithoutMedicalDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
-}
-
-input StudentUpdateWithoutParentDataInput {
-  firstName: String
-  lastName: String
-  birthday: String
-  zip: Int
-  skill: SkillLevel
-  gender: Gender
-  ageGroup: AgeGroupUpdateOneRequiredInput
-  classes: ClassUpdateManyWithoutStudentsInput
-  lessons: LessonUpdateManyWithoutClientInput
-  medical: MedicalConditionUpdateManyWithoutStudentInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithWhereUniqueNestedInput {
   where: StudentWhereUniqueInput!
   data: StudentUpdateDataInput!
+}
+
+input StudentUpdateWithWhereUniqueWithoutAdminInput {
+  where: StudentWhereUniqueInput!
+  data: StudentUpdateWithoutAdminDataInput!
 }
 
 input StudentUpdateWithWhereUniqueWithoutClassesInput {
@@ -6117,15 +6083,16 @@ input StudentUpdateWithWhereUniqueWithoutMedicalInput {
   data: StudentUpdateWithoutMedicalDataInput!
 }
 
-input StudentUpdateWithWhereUniqueWithoutParentInput {
-  where: StudentWhereUniqueInput!
-  data: StudentUpdateWithoutParentDataInput!
-}
-
 input StudentUpsertWithWhereUniqueNestedInput {
   where: StudentWhereUniqueInput!
   update: StudentUpdateDataInput!
   create: StudentCreateInput!
+}
+
+input StudentUpsertWithWhereUniqueWithoutAdminInput {
+  where: StudentWhereUniqueInput!
+  update: StudentUpdateWithoutAdminDataInput!
+  create: StudentCreateWithoutAdminInput!
 }
 
 input StudentUpsertWithWhereUniqueWithoutClassesInput {
@@ -6144,12 +6111,6 @@ input StudentUpsertWithWhereUniqueWithoutMedicalInput {
   where: StudentWhereUniqueInput!
   update: StudentUpdateWithoutMedicalDataInput!
   create: StudentCreateWithoutMedicalInput!
-}
-
-input StudentUpsertWithWhereUniqueWithoutParentInput {
-  where: StudentWhereUniqueInput!
-  update: StudentUpdateWithoutParentDataInput!
-  create: StudentCreateWithoutParentInput!
 }
 
 input StudentWhereInput {
@@ -6321,28 +6282,6 @@ input StudentWhereInput {
 
   """All values not ending with the given string."""
   birthday_not_ends_with: String
-  zip: Int
-
-  """All values that are not equal to given value."""
-  zip_not: Int
-
-  """All values that are contained in given list."""
-  zip_in: [Int!]
-
-  """All values that are not contained in given list."""
-  zip_not_in: [Int!]
-
-  """All values less than the given value."""
-  zip_lt: Int
-
-  """All values less than or equal the given value."""
-  zip_lte: Int
-
-  """All values greater than the given value."""
-  zip_gt: Int
-
-  """All values greater than or equal the given value."""
-  zip_gte: Int
   skill: SkillLevel
 
   """All values that are not equal to given value."""
@@ -6417,7 +6356,7 @@ input StudentWhereInput {
   medical_every: MedicalConditionWhereInput
   medical_some: MedicalConditionWhereInput
   medical_none: MedicalConditionWhereInput
-  parent: AccountAdminWhereInput
+  admin: AccountAdminWhereInput
 }
 
 input StudentWhereUniqueInput {

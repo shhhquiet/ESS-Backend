@@ -14,7 +14,7 @@ module.exports = {
   city: String!
   state: String!
   zip: Int!
-  children(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
+  students(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
@@ -39,18 +39,18 @@ input AccountAdminCreateInput {
   city: String!
   state: String!
   zip: Int!
-  children: StudentCreateManyWithoutParentInput
+  students: StudentCreateManyWithoutAdminInput
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
 }
 
-input AccountAdminCreateOneWithoutChildrenInput {
-  create: AccountAdminCreateWithoutChildrenInput
+input AccountAdminCreateOneWithoutStudentsInput {
+  create: AccountAdminCreateWithoutStudentsInput
   connect: AccountAdminWhereUniqueInput
 }
 
-input AccountAdminCreateWithoutChildrenInput {
+input AccountAdminCreateWithoutStudentsInput {
   id: ID
   email: String!
   password: String!
@@ -150,7 +150,7 @@ input AccountAdminUpdateInput {
   city: String
   state: String
   zip: Int
-  children: StudentUpdateManyWithoutParentInput
+  students: StudentUpdateManyWithoutAdminInput
   stripeId: String
   resetToken: String
   resetTokenExpiry: String
@@ -171,16 +171,16 @@ input AccountAdminUpdateManyMutationInput {
   resetTokenExpiry: String
 }
 
-input AccountAdminUpdateOneWithoutChildrenInput {
-  create: AccountAdminCreateWithoutChildrenInput
-  update: AccountAdminUpdateWithoutChildrenDataInput
-  upsert: AccountAdminUpsertWithoutChildrenInput
+input AccountAdminUpdateOneWithoutStudentsInput {
+  create: AccountAdminCreateWithoutStudentsInput
+  update: AccountAdminUpdateWithoutStudentsDataInput
+  upsert: AccountAdminUpsertWithoutStudentsInput
   delete: Boolean
   disconnect: Boolean
   connect: AccountAdminWhereUniqueInput
 }
 
-input AccountAdminUpdateWithoutChildrenDataInput {
+input AccountAdminUpdateWithoutStudentsDataInput {
   email: String
   password: String
   firstName: String
@@ -195,9 +195,9 @@ input AccountAdminUpdateWithoutChildrenDataInput {
   resetTokenExpiry: String
 }
 
-input AccountAdminUpsertWithoutChildrenInput {
-  update: AccountAdminUpdateWithoutChildrenDataInput!
-  create: AccountAdminCreateWithoutChildrenInput!
+input AccountAdminUpsertWithoutStudentsInput {
+  update: AccountAdminUpdateWithoutStudentsDataInput!
+  create: AccountAdminCreateWithoutStudentsInput!
 }
 
 input AccountAdminWhereInput {
@@ -335,9 +335,9 @@ input AccountAdminWhereInput {
   zip_lte: Int
   zip_gt: Int
   zip_gte: Int
-  children_every: StudentWhereInput
-  children_some: StudentWhereInput
-  children_none: StudentWhereInput
+  students_every: StudentWhereInput
+  students_some: StudentWhereInput
+  students_none: StudentWhereInput
   stripeId: String
   stripeId_not: String
   stripeId_in: [String!]
@@ -2968,14 +2968,13 @@ type Student {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroup!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   gender: Gender!
   medical(where: MedicalConditionWhereInput, orderBy: MedicalConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MedicalCondition!]
-  parent: AccountAdmin
+  admin: AccountAdmin
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2991,18 +2990,22 @@ input StudentCreateInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   lessons: LessonCreateManyWithoutClientInput
   gender: Gender!
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateManyInput {
   create: [StudentCreateInput!]
+  connect: [StudentWhereUniqueInput!]
+}
+
+input StudentCreateManyWithoutAdminInput {
+  create: [StudentCreateWithoutAdminInput!]
   connect: [StudentWhereUniqueInput!]
 }
 
@@ -3021,9 +3024,17 @@ input StudentCreateManyWithoutMedicalInput {
   connect: [StudentWhereUniqueInput!]
 }
 
-input StudentCreateManyWithoutParentInput {
-  create: [StudentCreateWithoutParentInput!]
-  connect: [StudentWhereUniqueInput!]
+input StudentCreateWithoutAdminInput {
+  id: ID
+  firstName: String!
+  lastName: String!
+  birthday: String!
+  skill: SkillLevel!
+  ageGroup: AgeGroupCreateOneInput!
+  classes: ClassCreateManyWithoutStudentsInput
+  lessons: LessonCreateManyWithoutClientInput
+  gender: Gender!
+  medical: MedicalConditionCreateManyWithoutStudentInput
 }
 
 input StudentCreateWithoutClassesInput {
@@ -3031,13 +3042,12 @@ input StudentCreateWithoutClassesInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroupCreateOneInput!
   lessons: LessonCreateManyWithoutClientInput
   gender: Gender!
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateWithoutLessonsInput {
@@ -3045,13 +3055,12 @@ input StudentCreateWithoutLessonsInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   gender: Gender!
   medical: MedicalConditionCreateManyWithoutStudentInput
-  parent: AccountAdminCreateOneWithoutChildrenInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 input StudentCreateWithoutMedicalInput {
@@ -3059,27 +3068,12 @@ input StudentCreateWithoutMedicalInput {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   ageGroup: AgeGroupCreateOneInput!
   classes: ClassCreateManyWithoutStudentsInput
   lessons: LessonCreateManyWithoutClientInput
   gender: Gender!
-  parent: AccountAdminCreateOneWithoutChildrenInput
-}
-
-input StudentCreateWithoutParentInput {
-  id: ID
-  firstName: String!
-  lastName: String!
-  birthday: String!
-  zip: Int!
-  skill: SkillLevel!
-  ageGroup: AgeGroupCreateOneInput!
-  classes: ClassCreateManyWithoutStudentsInput
-  lessons: LessonCreateManyWithoutClientInput
-  gender: Gender!
-  medical: MedicalConditionCreateManyWithoutStudentInput
+  admin: AccountAdminCreateOneWithoutStudentsInput
 }
 
 type StudentEdge {
@@ -3096,8 +3090,6 @@ enum StudentOrderByInput {
   lastName_DESC
   birthday_ASC
   birthday_DESC
-  zip_ASC
-  zip_DESC
   skill_ASC
   skill_DESC
   gender_ASC
@@ -3113,7 +3105,6 @@ type StudentPreviousValues {
   firstName: String!
   lastName: String!
   birthday: String!
-  zip: Int!
   skill: SkillLevel!
   gender: Gender!
   createdAt: DateTime!
@@ -3177,14 +3168,6 @@ input StudentScalarWhereInput {
   birthday_not_starts_with: String
   birthday_ends_with: String
   birthday_not_ends_with: String
-  zip: Int
-  zip_not: Int
-  zip_in: [Int!]
-  zip_not_in: [Int!]
-  zip_lt: Int
-  zip_lte: Int
-  zip_gt: Int
-  zip_gte: Int
   skill: SkillLevel
   skill_not: SkillLevel
   skill_in: [SkillLevel!]
@@ -3236,35 +3219,32 @@ input StudentUpdateDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
   gender: Gender
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
   gender: Gender
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateManyDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
 }
@@ -3285,9 +3265,20 @@ input StudentUpdateManyMutationInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   gender: Gender
+}
+
+input StudentUpdateManyWithoutAdminInput {
+  create: [StudentCreateWithoutAdminInput!]
+  delete: [StudentWhereUniqueInput!]
+  connect: [StudentWhereUniqueInput!]
+  set: [StudentWhereUniqueInput!]
+  disconnect: [StudentWhereUniqueInput!]
+  update: [StudentUpdateWithWhereUniqueWithoutAdminInput!]
+  upsert: [StudentUpsertWithWhereUniqueWithoutAdminInput!]
+  deleteMany: [StudentScalarWhereInput!]
+  updateMany: [StudentUpdateManyWithWhereNestedInput!]
 }
 
 input StudentUpdateManyWithoutClassesInput {
@@ -3326,78 +3317,67 @@ input StudentUpdateManyWithoutMedicalInput {
   updateMany: [StudentUpdateManyWithWhereNestedInput!]
 }
 
-input StudentUpdateManyWithoutParentInput {
-  create: [StudentCreateWithoutParentInput!]
-  delete: [StudentWhereUniqueInput!]
-  connect: [StudentWhereUniqueInput!]
-  set: [StudentWhereUniqueInput!]
-  disconnect: [StudentWhereUniqueInput!]
-  update: [StudentUpdateWithWhereUniqueWithoutParentInput!]
-  upsert: [StudentUpsertWithWhereUniqueWithoutParentInput!]
-  deleteMany: [StudentScalarWhereInput!]
-  updateMany: [StudentUpdateManyWithWhereNestedInput!]
-}
-
 input StudentUpdateManyWithWhereNestedInput {
   where: StudentScalarWhereInput!
   data: StudentUpdateManyDataInput!
+}
+
+input StudentUpdateWithoutAdminDataInput {
+  firstName: String
+  lastName: String
+  birthday: String
+  skill: SkillLevel
+  ageGroup: AgeGroupUpdateOneRequiredInput
+  classes: ClassUpdateManyWithoutStudentsInput
+  lessons: LessonUpdateManyWithoutClientInput
+  gender: Gender
+  medical: MedicalConditionUpdateManyWithoutStudentInput
 }
 
 input StudentUpdateWithoutClassesDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   ageGroup: AgeGroupUpdateOneRequiredInput
   lessons: LessonUpdateManyWithoutClientInput
   gender: Gender
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithoutLessonsDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   gender: Gender
   medical: MedicalConditionUpdateManyWithoutStudentInput
-  parent: AccountAdminUpdateOneWithoutChildrenInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithoutMedicalDataInput {
   firstName: String
   lastName: String
   birthday: String
-  zip: Int
   skill: SkillLevel
   ageGroup: AgeGroupUpdateOneRequiredInput
   classes: ClassUpdateManyWithoutStudentsInput
   lessons: LessonUpdateManyWithoutClientInput
   gender: Gender
-  parent: AccountAdminUpdateOneWithoutChildrenInput
-}
-
-input StudentUpdateWithoutParentDataInput {
-  firstName: String
-  lastName: String
-  birthday: String
-  zip: Int
-  skill: SkillLevel
-  ageGroup: AgeGroupUpdateOneRequiredInput
-  classes: ClassUpdateManyWithoutStudentsInput
-  lessons: LessonUpdateManyWithoutClientInput
-  gender: Gender
-  medical: MedicalConditionUpdateManyWithoutStudentInput
+  admin: AccountAdminUpdateOneWithoutStudentsInput
 }
 
 input StudentUpdateWithWhereUniqueNestedInput {
   where: StudentWhereUniqueInput!
   data: StudentUpdateDataInput!
+}
+
+input StudentUpdateWithWhereUniqueWithoutAdminInput {
+  where: StudentWhereUniqueInput!
+  data: StudentUpdateWithoutAdminDataInput!
 }
 
 input StudentUpdateWithWhereUniqueWithoutClassesInput {
@@ -3415,15 +3395,16 @@ input StudentUpdateWithWhereUniqueWithoutMedicalInput {
   data: StudentUpdateWithoutMedicalDataInput!
 }
 
-input StudentUpdateWithWhereUniqueWithoutParentInput {
-  where: StudentWhereUniqueInput!
-  data: StudentUpdateWithoutParentDataInput!
-}
-
 input StudentUpsertWithWhereUniqueNestedInput {
   where: StudentWhereUniqueInput!
   update: StudentUpdateDataInput!
   create: StudentCreateInput!
+}
+
+input StudentUpsertWithWhereUniqueWithoutAdminInput {
+  where: StudentWhereUniqueInput!
+  update: StudentUpdateWithoutAdminDataInput!
+  create: StudentCreateWithoutAdminInput!
 }
 
 input StudentUpsertWithWhereUniqueWithoutClassesInput {
@@ -3442,12 +3423,6 @@ input StudentUpsertWithWhereUniqueWithoutMedicalInput {
   where: StudentWhereUniqueInput!
   update: StudentUpdateWithoutMedicalDataInput!
   create: StudentCreateWithoutMedicalInput!
-}
-
-input StudentUpsertWithWhereUniqueWithoutParentInput {
-  where: StudentWhereUniqueInput!
-  update: StudentUpdateWithoutParentDataInput!
-  create: StudentCreateWithoutParentInput!
 }
 
 input StudentWhereInput {
@@ -3507,14 +3482,6 @@ input StudentWhereInput {
   birthday_not_starts_with: String
   birthday_ends_with: String
   birthday_not_ends_with: String
-  zip: Int
-  zip_not: Int
-  zip_in: [Int!]
-  zip_not_in: [Int!]
-  zip_lt: Int
-  zip_lte: Int
-  zip_gt: Int
-  zip_gte: Int
   skill: SkillLevel
   skill_not: SkillLevel
   skill_in: [SkillLevel!]
@@ -3533,7 +3500,7 @@ input StudentWhereInput {
   medical_every: MedicalConditionWhereInput
   medical_some: MedicalConditionWhereInput
   medical_none: MedicalConditionWhereInput
-  parent: AccountAdminWhereInput
+  admin: AccountAdminWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

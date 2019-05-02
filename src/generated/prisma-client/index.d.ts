@@ -419,8 +419,6 @@ export type StudentOrderByInput =
   | "lastName_DESC"
   | "birthday_ASC"
   | "birthday_DESC"
-  | "zip_ASC"
-  | "zip_DESC"
   | "skill_ASC"
   | "skill_DESC"
   | "gender_ASC"
@@ -666,14 +664,6 @@ export interface StudentWhereInput {
   birthday_not_starts_with?: String;
   birthday_ends_with?: String;
   birthday_not_ends_with?: String;
-  zip?: Int;
-  zip_not?: Int;
-  zip_in?: Int[] | Int;
-  zip_not_in?: Int[] | Int;
-  zip_lt?: Int;
-  zip_lte?: Int;
-  zip_gt?: Int;
-  zip_gte?: Int;
   skill?: SkillLevel;
   skill_not?: SkillLevel;
   skill_in?: SkillLevel[] | SkillLevel;
@@ -692,7 +682,7 @@ export interface StudentWhereInput {
   medical_every?: MedicalConditionWhereInput;
   medical_some?: MedicalConditionWhereInput;
   medical_none?: MedicalConditionWhereInput;
-  parent?: AccountAdminWhereInput;
+  admin?: AccountAdminWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1367,9 +1357,9 @@ export interface AccountAdminWhereInput {
   zip_lte?: Int;
   zip_gt?: Int;
   zip_gte?: Int;
-  children_every?: StudentWhereInput;
-  children_some?: StudentWhereInput;
-  children_none?: StudentWhereInput;
+  students_every?: StudentWhereInput;
+  students_some?: StudentWhereInput;
+  students_none?: StudentWhereInput;
   stripeId?: String;
   stripeId_not?: String;
   stripeId_in?: String[] | String;
@@ -1650,23 +1640,22 @@ export interface AccountAdminCreateInput {
   city: String;
   state: String;
   zip: Int;
-  children?: StudentCreateManyWithoutParentInput;
+  students?: StudentCreateManyWithoutAdminInput;
   stripeId?: String;
   resetToken?: String;
   resetTokenExpiry?: String;
 }
 
-export interface StudentCreateManyWithoutParentInput {
-  create?: StudentCreateWithoutParentInput[] | StudentCreateWithoutParentInput;
+export interface StudentCreateManyWithoutAdminInput {
+  create?: StudentCreateWithoutAdminInput[] | StudentCreateWithoutAdminInput;
   connect?: StudentWhereUniqueInput[] | StudentWhereUniqueInput;
 }
 
-export interface StudentCreateWithoutParentInput {
+export interface StudentCreateWithoutAdminInput {
   id?: ID_Input;
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   ageGroup: AgeGroupCreateOneInput;
   classes?: ClassCreateManyWithoutStudentsInput;
@@ -1725,14 +1714,13 @@ export interface StudentCreateInput {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   ageGroup: AgeGroupCreateOneInput;
   classes?: ClassCreateManyWithoutStudentsInput;
   lessons?: LessonCreateManyWithoutClientInput;
   gender: Gender;
   medical?: MedicalConditionCreateManyWithoutStudentInput;
-  parent?: AccountAdminCreateOneWithoutChildrenInput;
+  admin?: AccountAdminCreateOneWithoutStudentsInput;
 }
 
 export interface ClassCreateManyWithoutStudentsInput {
@@ -1812,13 +1800,12 @@ export interface StudentCreateWithoutLessonsInput {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   ageGroup: AgeGroupCreateOneInput;
   classes?: ClassCreateManyWithoutStudentsInput;
   gender: Gender;
   medical?: MedicalConditionCreateManyWithoutStudentInput;
-  parent?: AccountAdminCreateOneWithoutChildrenInput;
+  admin?: AccountAdminCreateOneWithoutStudentsInput;
 }
 
 export interface MedicalConditionCreateManyWithoutStudentInput {
@@ -1835,12 +1822,12 @@ export interface MedicalConditionCreateWithoutStudentInput {
   description: String;
 }
 
-export interface AccountAdminCreateOneWithoutChildrenInput {
-  create?: AccountAdminCreateWithoutChildrenInput;
+export interface AccountAdminCreateOneWithoutStudentsInput {
+  create?: AccountAdminCreateWithoutStudentsInput;
   connect?: AccountAdminWhereUniqueInput;
 }
 
-export interface AccountAdminCreateWithoutChildrenInput {
+export interface AccountAdminCreateWithoutStudentsInput {
   id?: ID_Input;
   email: String;
   password: String;
@@ -1933,13 +1920,12 @@ export interface StudentCreateWithoutClassesInput {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   ageGroup: AgeGroupCreateOneInput;
   lessons?: LessonCreateManyWithoutClientInput;
   gender: Gender;
   medical?: MedicalConditionCreateManyWithoutStudentInput;
-  parent?: AccountAdminCreateOneWithoutChildrenInput;
+  admin?: AccountAdminCreateOneWithoutStudentsInput;
 }
 
 export interface AccountAdminUpdateInput {
@@ -1952,40 +1938,39 @@ export interface AccountAdminUpdateInput {
   city?: String;
   state?: String;
   zip?: Int;
-  children?: StudentUpdateManyWithoutParentInput;
+  students?: StudentUpdateManyWithoutAdminInput;
   stripeId?: String;
   resetToken?: String;
   resetTokenExpiry?: String;
 }
 
-export interface StudentUpdateManyWithoutParentInput {
-  create?: StudentCreateWithoutParentInput[] | StudentCreateWithoutParentInput;
+export interface StudentUpdateManyWithoutAdminInput {
+  create?: StudentCreateWithoutAdminInput[] | StudentCreateWithoutAdminInput;
   delete?: StudentWhereUniqueInput[] | StudentWhereUniqueInput;
   connect?: StudentWhereUniqueInput[] | StudentWhereUniqueInput;
   set?: StudentWhereUniqueInput[] | StudentWhereUniqueInput;
   disconnect?: StudentWhereUniqueInput[] | StudentWhereUniqueInput;
   update?:
-    | StudentUpdateWithWhereUniqueWithoutParentInput[]
-    | StudentUpdateWithWhereUniqueWithoutParentInput;
+    | StudentUpdateWithWhereUniqueWithoutAdminInput[]
+    | StudentUpdateWithWhereUniqueWithoutAdminInput;
   upsert?:
-    | StudentUpsertWithWhereUniqueWithoutParentInput[]
-    | StudentUpsertWithWhereUniqueWithoutParentInput;
+    | StudentUpsertWithWhereUniqueWithoutAdminInput[]
+    | StudentUpsertWithWhereUniqueWithoutAdminInput;
   deleteMany?: StudentScalarWhereInput[] | StudentScalarWhereInput;
   updateMany?:
     | StudentUpdateManyWithWhereNestedInput[]
     | StudentUpdateManyWithWhereNestedInput;
 }
 
-export interface StudentUpdateWithWhereUniqueWithoutParentInput {
+export interface StudentUpdateWithWhereUniqueWithoutAdminInput {
   where: StudentWhereUniqueInput;
-  data: StudentUpdateWithoutParentDataInput;
+  data: StudentUpdateWithoutAdminDataInput;
 }
 
-export interface StudentUpdateWithoutParentDataInput {
+export interface StudentUpdateWithoutAdminDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   classes?: ClassUpdateManyWithoutStudentsInput;
@@ -2079,14 +2064,13 @@ export interface StudentUpdateDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   classes?: ClassUpdateManyWithoutStudentsInput;
   lessons?: LessonUpdateManyWithoutClientInput;
   gender?: Gender;
   medical?: MedicalConditionUpdateManyWithoutStudentInput;
-  parent?: AccountAdminUpdateOneWithoutChildrenInput;
+  admin?: AccountAdminUpdateOneWithoutStudentsInput;
 }
 
 export interface ClassUpdateManyWithoutStudentsInput {
@@ -2218,13 +2202,12 @@ export interface StudentUpdateWithoutLessonsDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   classes?: ClassUpdateManyWithoutStudentsInput;
   gender?: Gender;
   medical?: MedicalConditionUpdateManyWithoutStudentInput;
-  parent?: AccountAdminUpdateOneWithoutChildrenInput;
+  admin?: AccountAdminUpdateOneWithoutStudentsInput;
 }
 
 export interface MedicalConditionUpdateManyWithoutStudentInput {
@@ -2329,16 +2312,16 @@ export interface MedicalConditionUpdateManyDataInput {
   description?: String;
 }
 
-export interface AccountAdminUpdateOneWithoutChildrenInput {
-  create?: AccountAdminCreateWithoutChildrenInput;
-  update?: AccountAdminUpdateWithoutChildrenDataInput;
-  upsert?: AccountAdminUpsertWithoutChildrenInput;
+export interface AccountAdminUpdateOneWithoutStudentsInput {
+  create?: AccountAdminCreateWithoutStudentsInput;
+  update?: AccountAdminUpdateWithoutStudentsDataInput;
+  upsert?: AccountAdminUpsertWithoutStudentsInput;
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: AccountAdminWhereUniqueInput;
 }
 
-export interface AccountAdminUpdateWithoutChildrenDataInput {
+export interface AccountAdminUpdateWithoutStudentsDataInput {
   email?: String;
   password?: String;
   firstName?: String;
@@ -2353,9 +2336,9 @@ export interface AccountAdminUpdateWithoutChildrenDataInput {
   resetTokenExpiry?: String;
 }
 
-export interface AccountAdminUpsertWithoutChildrenInput {
-  update: AccountAdminUpdateWithoutChildrenDataInput;
-  create: AccountAdminCreateWithoutChildrenInput;
+export interface AccountAdminUpsertWithoutStudentsInput {
+  update: AccountAdminUpdateWithoutStudentsDataInput;
+  create: AccountAdminCreateWithoutStudentsInput;
 }
 
 export interface StudentUpsertWithWhereUniqueWithoutLessonsInput {
@@ -2421,14 +2404,6 @@ export interface StudentScalarWhereInput {
   birthday_not_starts_with?: String;
   birthday_ends_with?: String;
   birthday_not_ends_with?: String;
-  zip?: Int;
-  zip_not?: Int;
-  zip_in?: Int[] | Int;
-  zip_not_in?: Int[] | Int;
-  zip_lt?: Int;
-  zip_lte?: Int;
-  zip_gt?: Int;
-  zip_gte?: Int;
   skill?: SkillLevel;
   skill_not?: SkillLevel;
   skill_in?: SkillLevel[] | SkillLevel;
@@ -2467,7 +2442,6 @@ export interface StudentUpdateManyDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   gender?: Gender;
 }
@@ -2836,13 +2810,12 @@ export interface StudentUpdateWithoutClassesDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   lessons?: LessonUpdateManyWithoutClientInput;
   gender?: Gender;
   medical?: MedicalConditionUpdateManyWithoutStudentInput;
-  parent?: AccountAdminUpdateOneWithoutChildrenInput;
+  admin?: AccountAdminUpdateOneWithoutStudentsInput;
 }
 
 export interface StudentUpsertWithWhereUniqueWithoutClassesInput {
@@ -3110,10 +3083,10 @@ export interface AgeGroupUpsertNestedInput {
   create: AgeGroupCreateInput;
 }
 
-export interface StudentUpsertWithWhereUniqueWithoutParentInput {
+export interface StudentUpsertWithWhereUniqueWithoutAdminInput {
   where: StudentWhereUniqueInput;
-  update: StudentUpdateWithoutParentDataInput;
-  create: StudentCreateWithoutParentInput;
+  update: StudentUpdateWithoutAdminDataInput;
+  create: StudentCreateWithoutAdminInput;
 }
 
 export interface AccountAdminUpdateManyMutationInput {
@@ -3328,13 +3301,12 @@ export interface StudentCreateWithoutMedicalInput {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   ageGroup: AgeGroupCreateOneInput;
   classes?: ClassCreateManyWithoutStudentsInput;
   lessons?: LessonCreateManyWithoutClientInput;
   gender: Gender;
-  parent?: AccountAdminCreateOneWithoutChildrenInput;
+  admin?: AccountAdminCreateOneWithoutStudentsInput;
 }
 
 export interface MedicalConditionUpdateInput {
@@ -3371,13 +3343,12 @@ export interface StudentUpdateWithoutMedicalDataInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   classes?: ClassUpdateManyWithoutStudentsInput;
   lessons?: LessonUpdateManyWithoutClientInput;
   gender?: Gender;
-  parent?: AccountAdminUpdateOneWithoutChildrenInput;
+  admin?: AccountAdminUpdateOneWithoutStudentsInput;
 }
 
 export interface StudentUpsertWithWhereUniqueWithoutMedicalInput {
@@ -3394,21 +3365,19 @@ export interface StudentUpdateInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   ageGroup?: AgeGroupUpdateOneRequiredInput;
   classes?: ClassUpdateManyWithoutStudentsInput;
   lessons?: LessonUpdateManyWithoutClientInput;
   gender?: Gender;
   medical?: MedicalConditionUpdateManyWithoutStudentInput;
-  parent?: AccountAdminUpdateOneWithoutChildrenInput;
+  admin?: AccountAdminUpdateOneWithoutStudentsInput;
 }
 
 export interface StudentUpdateManyMutationInput {
   firstName?: String;
   lastName?: String;
   birthday?: String;
-  zip?: Int;
   skill?: SkillLevel;
   gender?: Gender;
 }
@@ -3548,7 +3517,7 @@ export interface AccountAdminPromise
   city: () => Promise<String>;
   state: () => Promise<String>;
   zip: () => Promise<Int>;
-  children: <T = FragmentableArray<Student>>(args?: {
+  students: <T = FragmentableArray<Student>>(args?: {
     where?: StudentWhereInput;
     orderBy?: StudentOrderByInput;
     skip?: Int;
@@ -3577,7 +3546,7 @@ export interface AccountAdminSubscription
   city: () => Promise<AsyncIterator<String>>;
   state: () => Promise<AsyncIterator<String>>;
   zip: () => Promise<AsyncIterator<Int>>;
-  children: <T = Promise<AsyncIterator<StudentSubscription>>>(args?: {
+  students: <T = Promise<AsyncIterator<StudentSubscription>>>(args?: {
     where?: StudentWhereInput;
     orderBy?: StudentOrderByInput;
     skip?: Int;
@@ -3598,7 +3567,6 @@ export interface Student {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   gender: Gender;
   createdAt: DateTimeOutput;
@@ -3610,7 +3578,6 @@ export interface StudentPromise extends Promise<Student>, Fragmentable {
   firstName: () => Promise<String>;
   lastName: () => Promise<String>;
   birthday: () => Promise<String>;
-  zip: () => Promise<Int>;
   skill: () => Promise<SkillLevel>;
   ageGroup: <T = AgeGroupPromise>() => T;
   classes: <T = FragmentableArray<Class>>(args?: {
@@ -3641,7 +3608,7 @@ export interface StudentPromise extends Promise<Student>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  parent: <T = AccountAdminPromise>() => T;
+  admin: <T = AccountAdminPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -3653,7 +3620,6 @@ export interface StudentSubscription
   firstName: () => Promise<AsyncIterator<String>>;
   lastName: () => Promise<AsyncIterator<String>>;
   birthday: () => Promise<AsyncIterator<String>>;
-  zip: () => Promise<AsyncIterator<Int>>;
   skill: () => Promise<AsyncIterator<SkillLevel>>;
   ageGroup: <T = AgeGroupSubscription>() => T;
   classes: <T = Promise<AsyncIterator<ClassSubscription>>>(args?: {
@@ -3684,7 +3650,7 @@ export interface StudentSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  parent: <T = AccountAdminSubscription>() => T;
+  admin: <T = AccountAdminSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -5095,7 +5061,6 @@ export interface StudentPreviousValues {
   firstName: String;
   lastName: String;
   birthday: String;
-  zip: Int;
   skill: SkillLevel;
   gender: Gender;
   createdAt: DateTimeOutput;
@@ -5109,7 +5074,6 @@ export interface StudentPreviousValuesPromise
   firstName: () => Promise<String>;
   lastName: () => Promise<String>;
   birthday: () => Promise<String>;
-  zip: () => Promise<Int>;
   skill: () => Promise<SkillLevel>;
   gender: () => Promise<Gender>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -5123,7 +5087,6 @@ export interface StudentPreviousValuesSubscription
   firstName: () => Promise<AsyncIterator<String>>;
   lastName: () => Promise<AsyncIterator<String>>;
   birthday: () => Promise<AsyncIterator<String>>;
-  zip: () => Promise<AsyncIterator<Int>>;
   skill: () => Promise<AsyncIterator<SkillLevel>>;
   gender: () => Promise<AsyncIterator<Gender>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;

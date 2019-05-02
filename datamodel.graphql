@@ -53,7 +53,7 @@ type Student {
 	lessons: [Lesson!]!
 	gender: Gender!
 	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
-	parent: AccountAdmin @relation(link: INLINE)
+	admin: AccountAdmin @relation(link: INLINE)
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -69,7 +69,7 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
 	city: String!
 	state: String!
 	zip: Int!
-	children: [Student!]!
+	students: [Student!]!
 	stripeId: String # if we use stripe for charges
 	resetToken: String
 	resetTokenExpiry: String
