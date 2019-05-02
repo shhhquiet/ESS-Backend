@@ -44,15 +44,15 @@ enum Color {
 
 type Student {
 	id: ID! @id
-	email: String!
-	password: String!
+	# email: String!
+	# password: String!
 	firstName: String!
 	lastName: String!
 	birthday: String!
-	phone: String!
-	address: String!
-	city: String!
-	state: String!
+	# phone: String!
+	# address: String!
+	# city: String!
+	# state: String!
 	zip: Int!
 	skill: SkillLevel!
 	ageGroup: AgeGroup!
