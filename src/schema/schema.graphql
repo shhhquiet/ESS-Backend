@@ -3,46 +3,65 @@
 type Mutation {
   signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
 	signin(email: String!, password: String!): User!
-	requestReset(email: String!): Message
+	requestReset(email: String!): String
 	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
-	signout: Message
+	signout: String
 
 }
 
 type Query {
-
+  instructors: [Instructor]
 }
 
 
 type Instructor {
-  id: ID! 
-  email: String! 
-  password: String!
-  phone: String! 
-  firstName: String!
-  lastName: String!
-  gender: Gender!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  bio: String!
-  role: Role!
-  imageURL: String!
-  startDate: DateTime!
-  currentEmployee: Boolean! default(value: true)
-  clients: [Client!]!
-  classes: [Class]
-  lessons: [Lesson]
-  createdAt: DateTime! 
-  updatedAt: DateTime!
+	id: ID!
+	email: String! 
+	password: String!
+	phone: String! 
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	bio: String!
+	role: Role!
+	imageURL: String!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	clients: [Student!]!
+	classes: [Class]
+	lessons: [Lesson]
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
+}
+
+type FrontDesk {
+	id: ID! 
+	email: String! 
+	password: String!
+	phone: String!
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	role: Role!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
 }
 
 type MedicalCondition {
   id: ID! 
   description: String!
-  student: [Student] @relation(type: "StudentMedical")
+  student: [Student] 
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -103,18 +122,24 @@ type Student {
 }
 
 type AccountAdmin { # for parents since they'll have control over payments, etc.
-  id: ID! 
-  email: String! 
-  password: String!
-  firstName: String!
-  lastName: String!
-  phone: String # not sure if we want for Parents or not
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  dependants: [Student!]
-  stripeId: String # if we use stripe for charges
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID! 
+	email: String! 
+	password: String!
+	firstName: String!
+	lastName: String!
+	phone: String!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	students: [Student!]!
+	stripeId: String # if we use stripe for charges
+	resetToken: String
+	resetTokenExpiry: String
+	createdAt: DateTime! 
+	updatedAt: DateTime! 
 }
+
+union User = AccountAdmin | Student | Instructor | FrontDesk
+union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
+union Instruction = Lesson | Class #
