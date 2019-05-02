@@ -77,26 +77,7 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
 	updatedAt: DateTime! @updatedAt
 }
 
-type FrontDesk {
-	id: ID! @id
-	email: String! @unique
-	password: String!
-	phone: String! @unique
-	firstName: String!
-	lastName: String!
-	gender: Gender!
-	address: String!
-	city: String!
-	state: String!
-	zip: Int!
-	role: Role!
-	startDate: DateTime!
-	currentEmployee: Boolean!
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
-}
-
-type Instructor {
+type Employee {
 	id: ID! @id
 	email: String! @unique
 	password: String!
@@ -109,13 +90,13 @@ type Instructor {
 	state: String!
 	zip: Int!
 	bio: String!
-	role: Role!
+	role: [Role]
 	imageURL: String!
 	startDate: DateTime!
 	currentEmployee: Boolean!
 	clients: [Student!]!
-	classes: [Class]
-	lessons: [Lesson]
+	classes: [Class!]!
+	lessons: [Lesson!]!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -137,7 +118,7 @@ type Class {
 	capacity: Int!
 	price: Int!
 	day: Day!
-	instructor: Instructor!
+	instructor: Employee!
 	duration: Int!
 	students: [Student!]!
 	time: DateTime!
@@ -149,7 +130,7 @@ type Lesson {
 	id: ID! @id
 	name: String!
 	description: String!
-	instructor: Instructor! # @relation(name: "LessonInstructor")
+	instructor: Employee! # @relation(name: "LessonInstructor")
 	client: [Student]
 	duration: Int!
 	calendarColor: Color!
@@ -164,11 +145,12 @@ type AgeGroup {
 	minAge: Int!
 	maxAge: Int!
 	level: SkillLevel
-	instructors: [Instructor!]! #assuming there are multiple instructors per age group
+	instructors: [Employee!]! #assuming there are multiple instructors per age group
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
 
-union User = AccountAdmin | Student | Instructor | FrontDesk
+union User = AccountAdmin | Student | Employee 
 union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
 union Instruction = Lesson | Class # we can search for all classes and lessons in one query instead of two
+
