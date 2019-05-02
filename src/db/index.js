@@ -1,6 +1,6 @@
 const { Prisma } = require('prisma-binding');
-const Client = require('./generated/prisma-client');
-const { fragmentReplacements } = require('./resolvers');
+const Client = require('../generated/prisma-client');
+const { fragmentReplacements } = require('../resolvers');
 
 module.exports = {
 	client: new Client.Prisma({

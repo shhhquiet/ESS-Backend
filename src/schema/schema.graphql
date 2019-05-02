@@ -35,22 +35,20 @@ type Instructor {
   clients: [Client!]!
   classes: [Class]
   lessons: [Lesson]
-  # workDays: [Day] # a way to track what days of the week someone normally works? or we can make a separate type
   createdAt: DateTime! 
   updatedAt: DateTime!
 }
 
 type MedicalCondition {
-  id: ID! @unique
+  id: ID! 
   description: String!
   student: [Student] @relation(type: "StudentMedical")
-  # instructor: [Instructor] @relation(type: "InstructorMedical")
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type Class {
-  id: ID! @unique
+  id: ID! 
   name: String!
   description: String!
   ageGroup: AgeGroup!
@@ -67,7 +65,7 @@ type Class {
 }
 
 type Lesson {
-  id: ID! @unique
+  id: ID! 
   name: String!
   description: String!
   instructor: Instructor! 
@@ -89,7 +87,7 @@ type AgeGroup {
   updatedAt: DateTime!
 }
 
-type Child {
+type Student {
   id: ID! 
   firstName: String!
   lastName: String!
@@ -115,7 +113,7 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
   city: String!
   state: String!
   zip: Int!
-  dependants: [Child!]
+  dependants: [Student!]
   stripeId: String # if we use stripe for charges
   createdAt: DateTime!
   updatedAt: DateTime!
