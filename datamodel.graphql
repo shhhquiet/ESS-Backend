@@ -1,199 +1,181 @@
 enum Gender {
-  MALE
-  FEMALE
+	MALE
+	FEMALE
 }
 
 enum Role {
-  ADMIN
-  INSTRUCTOR
-  FRONT_DESK
+	ADMIN
+	INSTRUCTOR
+	FRONT_DESK
 }
 
 enum SkillLevel {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
+	BEGINNER
+	INTERMEDIATE
+	ADVANCED
 }
 
 enum LessonType {
-  _2on1
-  _1on1
+	TWO_ON_ONE
+	ONE_ON_ONE
 }
 
 enum Day {
-  SUNDAY
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
+	SUNDAY
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
 }
 
 enum Color {
-  RED
-  BLUE
-  BLACK
-  PURPLE
-  PINK
-  GREEN
-  ORANGE
-  GREY
-  YELLOW
+	RED
+	BLUE
+	BLACK
+	PURPLE
+	PINK
+	GREEN
+	ORANGE
+	GREY
+	YELLOW
 }
 
-# the datamodel uses the new Prisma 1.31 syntax just so people aren't confused
-
-interface Employee {
-  id: ID! @id
-  email: String! @unique
-  password: String!
-  phone: String! @unique
-  firstName: String!
-  lastName: String!
-  gender: Gender!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  role: Role!
-  startDate: DateTime!
-  currentEmployee: Boolean! default(value: true)
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type FrontDesk implements Employee {
-  id: ID! @id
-  email: String! @unique
-  password: String!
-  phone: String! @unique
-  firstName: String!
-  lastName: String!
-  gender: Gender!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  role: Role!
-  startDate: DateTime!
-  currentEmployee: Boolean! default(value: true)
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-
-type Instructor implements Employee {
-  id: ID! @id
-  email: String! @unique
-  password: String!
-  phone: String! @unique
-  firstName: String!
-  lastName: String!
-  gender: Gender!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  bio: String!
-  role: Role!
-  imageURL: String!
-  startDate: DateTime!
-  currentEmployee: Boolean! default(value: true)
-  clients: [Client!]!
-  classes: [Class]
-  lessons: [Lesson]
-  # workDays: [Day] # a way to track what days of the week someone normally works? or we can make a separate type
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type MedicalCondition {
-  id: ID! @id
-  description: String!
-  student: [Student] @relation(type: "StudentMedical")
-  # instructor: [Instructor] @relation(type: "InstructorMedical")
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Class {
-  id: ID! @id
-  name: String!
-  description: String!
-  ageGroup: AgeGroup!
-  level: SkillLevel!
-  capacity: Int!
-  price: Int!
-  day: Day!
-  instructor: Instructor! # can there be multiple instructors for a class?
-  duration: Int! # 30 45 or 60 min
-  students: [Student!]!
-  time: DateTime! # may want to make this one be a string, not sure
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Lesson {
-  id: ID! @id
-  name: String!
-  description: String!
-  instructor: Instructor! @relation(name: "LessonInstructor")
-  duration: Int!
-  calendarColor: Color!
-  price: Int!
-  day: Day!
-  time: DateTime!
-  open: Boolean!
-}
-
-type AgeGroup {
-  id: ID! @id
-  minAge: Int!
-  maxAge: Int!
-  level: SkillLevel
-  instructors: [Instructor!]! #assuming there are multiple instructors per age group
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Child {
-  id: ID! @id
-  firstName: String!
-  lastName: String!
-  birthday: String!
-  skill: SkillLevel!
-  ageGroup: AgeGroup!
-  classes: [Class!]!
-  lessons: [Lesson!]!
-  gender: Gender!
-  medical: [MedicalCondition!]! # generic medical can be used for multiple students?
-  parent: AccountAdmin!
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+type Student {
+	id: ID! @id
+	email: String!
+	password: String!
+	firstName: String!
+	lastName: String!
+	birthday: String!
+	phone: String!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	skill: SkillLevel!
+	ageGroup: AgeGroup!
+	classes: [Class!]!
+	lessons: [Lesson!]!
+	gender: Gender!
+	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
+	parent: AccountAdmin @relation(link: INLINE)
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type AccountAdmin { # for parents since they'll have control over payments, etc.
-  id: ID! @id
-  email: String! @unique
-  password: String!
-  firstName: String!
-  lastName: String!
-  phone: String # not sure if we want for Parents or not
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  dependants: [Child!]! @relation(link: INLINE)
-  stripeId: String # if we use stripe for charges
-  resetToken: String
-  resetTokenExpiry: String
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+	id: ID! @id
+	email: String! @unique
+	password: String!
+	firstName: String!
+	lastName: String!
+	phone: String!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	children: [Student!]!
+	stripeId: String # if we use stripe for charges
+	resetToken: String
+	resetTokenExpiry: String
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
-union User = AccountAdmin | Instructor | FrontDesk
+type FrontDesk {
+	id: ID! @id
+	email: String! @unique
+	password: String!
+	phone: String! @unique
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	role: Role!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
 
-union Customer = AccountAdmin | Child # makes it so we can find Parents/Children in one single query
+type Instructor {
+	id: ID! @id
+	email: String! @unique
+	password: String!
+	phone: String! @unique
+	firstName: String!
+	lastName: String!
+	gender: Gender!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	bio: String!
+	role: Role!
+	imageURL: String!
+	startDate: DateTime!
+	currentEmployee: Boolean!
+	clients: [Student!]!
+	classes: [Class]
+	lessons: [Lesson]
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
 
+type MedicalCondition {
+	id: ID! @id
+	description: String!
+	student: [Student] @relation(type: "StudentMedical")
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
+
+type Class {
+	id: ID! @id
+	name: String!
+	description: String!
+	ageGroup: AgeGroup!
+	level: SkillLevel!
+	capacity: Int!
+	price: Int!
+	day: Day!
+	instructor: Instructor!
+	duration: Int!
+	students: [Student!]!
+	time: DateTime!
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
+
+type Lesson {
+	id: ID! @id
+	name: String!
+	description: String!
+	instructor: Instructor! # @relation(name: "LessonInstructor")
+	client: [Student]
+	duration: Int!
+	calendarColor: Color!
+	price: Int!
+	day: Day!
+	time: DateTime!
+	open: Boolean!
+}
+
+type AgeGroup {
+	id: ID! @id
+	minAge: Int!
+	maxAge: Int!
+	level: SkillLevel
+	instructors: [Instructor!]! #assuming there are multiple instructors per age group
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
+
+union User = AccountAdmin | Student | Instructor | FrontDesk
+union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
 union Instruction = Lesson | Class # we can search for all classes and lessons in one query instead of two

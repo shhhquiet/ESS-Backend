@@ -1,4 +1,5 @@
 endpoint: ${env:PRISMA_ENDPOINT}
+# endpoint: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
 datamodel: datamodel.graphql
 secret: ${env:PRISMA_SECRET}
 generate:
