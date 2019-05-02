@@ -5,7 +5,8 @@ const resolvers = {
 	Mutation: require('./mutation'),
 	User: require('./node'),
 	Customer: require('./node'),
-	Instruction: require('./node')
+	Instruction: require('./node'),
+	Staff: require('./node')
 };
 
 module.exports = {
