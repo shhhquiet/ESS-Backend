@@ -1,6 +1,15 @@
 const { forwardTo } = require('prisma-binding');
 module.exports = {
-  instructors: forwardTo('prisma'), 
   users: forwardTo('prisma'),
-  staff: forwardTo('prisma')
+  employees: forwardTo('prisma'),
+  async currentUser(parent, args, { userId, query }, info) {
+		if (!userId) return null;
+    console.log(userId, query)
+		return query.user(
+			{
+				where: { id: userId },
+			},
+			info
+		);
+	},
 };
