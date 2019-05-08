@@ -2,7 +2,9 @@
 
 type Mutation {
   signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
+  signupEmployee(data: AddEmployeeInput!): Employee!
 	signin(email: String!, password: String!): User!
+  signinEmployee(email: String!, password: String!): Employee!
 	requestReset(email: String!): String
 	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
@@ -34,11 +36,27 @@ type Employee {
 	imageURL: String!
 	startDate: DateTime!
 	currentEmployee: Boolean!
-	clients: [Student!]!
-	classes: [Class!]!
-	lessons: [Lesson!]!
+	clients: [Student]
+	classes: [Class]
+	lessons: [Lesson]
 	createdAt: DateTime! 
 	updatedAt: DateTime! 
+}
+
+input AddEmployeeInput {
+  email: String!
+  password: String!
+  phone: String!
+  firstName: String!
+  lastName: String!
+  gender: String!
+  address: String!
+  city: String!
+  state: String!
+  zip: Int!
+  bio: String!
+  imageURL: String!
+  role: [Role!]
 }
 
 
