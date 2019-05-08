@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
-
+const {
+	prisma: { query }
+} = require('../db');
 const userObject = `{
   id
   firstName
@@ -27,7 +29,7 @@ module.exports = {
 		const id = req.userId;
 		if (!id) return next();
 
-		const user = await query.user({ where: { id } }, userObject);
+		const user = await query.employee({ where: { id } }, userObject);
 		req.user = user;
 
 		next();
