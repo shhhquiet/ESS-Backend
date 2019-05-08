@@ -16,8 +16,8 @@ enum SkillLevel {
 }
 
 enum LessonType {
-	TWO_ON_ONE
-	ONE_ON_ONE
+	SINGLE
+	TWO_PLUS
 }
 
 enum Day {
@@ -113,15 +113,16 @@ type Class {
 	id: ID! @id
 	name: String!
 	description: String!
-	ageGroup: AgeGroup!
+	# minAge: Int!
+	# maxAge: Int!
 	level: SkillLevel!
 	capacity: Int!
 	price: Int!
-	day: Day!
+	# day: Day!
 	instructor: Employee!
 	duration: Int!
 	students: [Student!]!
-	time: DateTime!
+	dateTime: DateTime!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -133,22 +134,21 @@ type Lesson {
 	instructor: Employee! # @relation(name: "LessonInstructor")
 	client: [Student]
 	duration: Int!
-	calendarColor: Color!
+	type: LessonType
+	# calendarColor: Color!
 	price: Int!
-	day: Day!
-	time: DateTime!
+	# day: Day!
+	dateTime: DateTime!
 	open: Boolean!
 }
 
-type AgeGroup {
-	id: ID! @id
-	minAge: Int!
-	maxAge: Int!
-	level: SkillLevel
-	instructors: [Employee!]! #assuming there are multiple instructors per age group
-	createdAt: DateTime! @createdAt
-	updatedAt: DateTime! @updatedAt
-}
+# type AgeGroup {
+# 	id: ID! @id
+
+# 	instructors: [Employee!]! #assuming there are multiple instructors per age group
+# 	createdAt: DateTime! @createdAt
+# 	updatedAt: DateTime! @updatedAt
+# }
 
 union User = AccountAdmin | Student | Employee
 union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
