@@ -16,8 +16,8 @@ enum SkillLevel {
 }
 
 enum LessonType {
-	SINGLE
-	TWO_PLUS
+	ONE
+	TWO
 }
 
 enum Day {
@@ -28,18 +28,6 @@ enum Day {
 	THURSDAY
 	FRIDAY
 	SATURDAY
-}
-
-enum Color {
-	RED
-	BLUE
-	BLACK
-	PURPLE
-	PINK
-	GREEN
-	ORANGE
-	GREY
-	YELLOW
 }
 
 type Student {
@@ -93,10 +81,12 @@ type Employee {
 	role: [Role] @scalarList(strategy: RELATION)
 	imageURL: String!
 	startDate: DateTime!
-	currentEmployee: Boolean!
+	currentEmployee: Boolean! @default 
 	clients: [Student!]!
 	classes: [Class!]!
 	lessons: [Lesson!]!
+	lessonSinglePrice: Int
+	lessonDoublePrice: Int
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -104,25 +94,24 @@ type Employee {
 type MedicalCondition {
 	id: ID! @id
 	description: String!
-	student: [Student] @relation(type: "StudentMedical")
+	student: Student @relation(type: "StudentMedical")
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
 
 type Class {
 	id: ID! @id
-	name: String!
+	name: String
 	description: String!
-	# minAge: Int!
-	# maxAge: Int!
+	ageGroup: AgeGroup!
 	level: SkillLevel!
 	capacity: Int!
 	price: Int!
-	# day: Day!
+	day: Day!
 	instructor: Employee!
 	duration: Int!
 	students: [Student!]!
-	dateTime: DateTime!
+	time: DateTime!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
@@ -134,21 +123,20 @@ type Lesson {
 	instructor: Employee! # @relation(name: "LessonInstructor")
 	client: [Student]
 	duration: Int!
-	type: LessonType
-	# calendarColor: Color!
-	price: Int!
-	# day: Day!
-	dateTime: DateTime!
+	type: LessonType!
+	day: Day!
+	time: DateTime!
 	open: Boolean!
 }
 
-# type AgeGroup {
-# 	id: ID! @id
-
-# 	instructors: [Employee!]! #assuming there are multiple instructors per age group
-# 	createdAt: DateTime! @createdAt
-# 	updatedAt: DateTime! @updatedAt
-# }
+type AgeGroup {
+	id: ID! @id
+	name: String!
+	minAge: Int!
+	maxAge: Int
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
 
 union User = AccountAdmin | Student | Employee
 union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
