@@ -39,6 +39,8 @@ type Employee {
 	clients: [Student]
 	classes: [Class]
 	lessons: [Lesson]
+  lessonSinglePrice: Int
+	lessonDoublePrice: Int
 	createdAt: DateTime! 
 	updatedAt: DateTime! 
 }
@@ -63,14 +65,14 @@ input AddEmployeeInput {
 type MedicalCondition {
   id: ID! 
   description: String!
-  student: [Student] 
+  student: Student
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type Class {
   id: ID! 
-  name: String!
+  name: String
   description: String!
   ageGroup: AgeGroup!
   level: SkillLevel!
@@ -79,7 +81,7 @@ type Class {
   day: Day!
   instructor: Employee! # can there be multiple instructors for a class?
   duration: Int! # 30 45 or 60 min
-  students: [Student!]!
+  students: [Student]!
   time: DateTime! # may want to make this one be a string, not sure
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -90,22 +92,21 @@ type Lesson {
   name: String!
   description: String!
   instructor: Employee! 
+  client: [Student]
   duration: Int!
-  calendarColor: Color!
-  price: Int!
-  day: Day!
+  type: LessonType!
+	day: Day!
   time: DateTime!
   open: Boolean!
 }
 
 type AgeGroup {
-  id: ID! 
-  minAge: Int!
-  maxAge: Int!
-  level: SkillLevel
-  instructors: [Employee!]! #assuming there are multiple instructors per age group
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID! @id
+	name: String!
+	minAge: Int!
+	maxAge: Int
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
 }
 
 type Student {
@@ -118,6 +119,7 @@ type Student {
   classes: [Class!]!
   lessons: [Lesson!]!
   gender: Gender!
+  admin: AccountAdmin
   medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
   createdAt: DateTime!
   updatedAt: DateTime!
