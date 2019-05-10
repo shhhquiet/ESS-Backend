@@ -43,7 +43,6 @@ module.exports = {
     return user;
   },
   async signupEmployee(parent, {data}, {query, mutation, res}, info) {
-    console.log(data);
     data.email = data.email.toLowerCase();
     if (!/^(?=.*\d).{8,}$/.test(data.password)) {
       throw new Error("Password must be 8 characters with at least 1 number!");
