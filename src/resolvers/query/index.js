@@ -20,5 +20,12 @@ module.exports = {
 		} catch (e) {
 			throw new Error(`Oops something bad happened: ${e}`);
 		}
+	},
+	async instructorLessons(parent, args, { userId, query }, info) {
+		if (!userId) throw new Error('uh oh');
+
+		const lessons = await query.lessons({ where: { instructor: { id: userId } } }, info);
+
+		return lessons;
 	}
 };
