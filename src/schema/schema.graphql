@@ -16,6 +16,13 @@ type Query {
 	users: [User]
 	currentUser: User
 	lessons: [Lesson]
+	classes: [Class]
+	fullSchedule: ClassesAndLessons
+}
+
+type ClassesAndLessons {
+	lessons: [Lesson]
+	classes: [Class]
 }
 
 type Employee {
