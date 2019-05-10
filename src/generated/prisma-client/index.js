@@ -25,10 +25,6 @@ var models = [
     embedded: false
   },
   {
-    name: "Color",
-    embedded: false
-  },
-  {
     name: "Student",
     embedded: false
   },

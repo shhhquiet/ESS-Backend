@@ -1,5 +1,5 @@
 # source: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
-# timestamp: Wed May 01 2019 23:54:41 GMT-0500 (Central Daylight Time)
+# timestamp: Thu May 09 2019 14:23:12 GMT-0700 (Pacific Daylight Time)
 
 type AccountAdmin implements Node {
   id: ID!
@@ -794,10 +794,9 @@ input AccountAdminWhereUniqueInput {
 
 type AgeGroup implements Node {
   id: ID!
+  name: String!
   minAge: Int!
-  maxAge: Int!
-  level: SkillLevel
-  instructors(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Employee!]
+  maxAge: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -814,10 +813,9 @@ type AgeGroupConnection {
 
 input AgeGroupCreateInput {
   id: ID
+  name: String!
   minAge: Int!
-  maxAge: Int!
-  level: SkillLevel
-  instructors: EmployeeCreateManyInput
+  maxAge: Int
 }
 
 input AgeGroupCreateOneInput {
@@ -837,12 +835,12 @@ type AgeGroupEdge {
 enum AgeGroupOrderByInput {
   id_ASC
   id_DESC
+  name_ASC
+  name_DESC
   minAge_ASC
   minAge_DESC
   maxAge_ASC
   maxAge_DESC
-  level_ASC
-  level_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -851,9 +849,9 @@ enum AgeGroupOrderByInput {
 
 type AgeGroupPreviousValues {
   id: ID!
+  name: String!
   minAge: Int!
-  maxAge: Int!
-  level: SkillLevel
+  maxAge: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -898,23 +896,21 @@ input AgeGroupSubscriptionWhereInput {
 }
 
 input AgeGroupUpdateDataInput {
+  name: String
   minAge: Int
   maxAge: Int
-  level: SkillLevel
-  instructors: EmployeeUpdateManyInput
 }
 
 input AgeGroupUpdateInput {
+  name: String
   minAge: Int
   maxAge: Int
-  level: SkillLevel
-  instructors: EmployeeUpdateManyInput
 }
 
 input AgeGroupUpdateManyMutationInput {
+  name: String
   minAge: Int
   maxAge: Int
-  level: SkillLevel
 }
 
 input AgeGroupUpdateOneRequiredInput {
@@ -978,6 +974,46 @@ input AgeGroupWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
   minAge: Int
 
   """All values that are not equal to given value."""
@@ -1022,16 +1058,6 @@ input AgeGroupWhereInput {
 
   """All values greater than or equal the given value."""
   maxAge_gte: Int
-  level: SkillLevel
-
-  """All values that are not equal to given value."""
-  level_not: SkillLevel
-
-  """All values that are contained in given list."""
-  level_in: [SkillLevel!]
-
-  """All values that are not contained in given list."""
-  level_not_in: [SkillLevel!]
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1076,9 +1102,6 @@ input AgeGroupWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  instructors_every: EmployeeWhereInput
-  instructors_some: EmployeeWhereInput
-  instructors_none: EmployeeWhereInput
 }
 
 input AgeGroupWhereUniqueInput {
@@ -1120,7 +1143,7 @@ type BatchPayload {
 
 type Class implements Node {
   id: ID!
-  name: String!
+  name: String
   description: String!
   ageGroup: AgeGroup!
   level: SkillLevel!
@@ -1147,7 +1170,7 @@ type ClassConnection {
 
 input ClassCreateInput {
   id: ID
-  name: String!
+  name: String
   description: String!
   level: SkillLevel!
   capacity: Int!
@@ -1172,7 +1195,7 @@ input ClassCreateManyWithoutStudentsInput {
 
 input ClassCreateWithoutInstructorInput {
   id: ID
-  name: String!
+  name: String
   description: String!
   level: SkillLevel!
   capacity: Int!
@@ -1186,7 +1209,7 @@ input ClassCreateWithoutInstructorInput {
 
 input ClassCreateWithoutStudentsInput {
   id: ID
-  name: String!
+  name: String
   description: String!
   level: SkillLevel!
   capacity: Int!
@@ -1234,7 +1257,7 @@ enum ClassOrderByInput {
 
 type ClassPreviousValues {
   id: ID!
-  name: String!
+  name: String
   description: String!
   level: SkillLevel!
   capacity: Int!
@@ -1973,18 +1996,6 @@ input ClassWhereUniqueInput {
   id: ID
 }
 
-enum Color {
-  RED
-  BLUE
-  BLACK
-  PURPLE
-  PINK
-  GREEN
-  ORANGE
-  GREY
-  YELLOW
-}
-
 scalar DateTime
 
 enum Day {
@@ -2017,6 +2028,8 @@ type Employee implements Node {
   clients(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2046,16 +2059,13 @@ input EmployeeCreateInput {
   bio: String!
   imageURL: String!
   startDate: DateTime!
-  currentEmployee: Boolean!
+  currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeCreateroleInput
   clients: StudentCreateManyInput
   classes: ClassCreateManyWithoutInstructorInput
   lessons: LessonCreateManyWithoutInstructorInput
-}
-
-input EmployeeCreateManyInput {
-  create: [EmployeeCreateInput!]
-  connect: [EmployeeWhereUniqueInput!]
 }
 
 input EmployeeCreateOneWithoutClassesInput {
@@ -2087,7 +2097,9 @@ input EmployeeCreateWithoutClassesInput {
   bio: String!
   imageURL: String!
   startDate: DateTime!
-  currentEmployee: Boolean!
+  currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeCreateroleInput
   clients: StudentCreateManyInput
   lessons: LessonCreateManyWithoutInstructorInput
@@ -2108,7 +2120,9 @@ input EmployeeCreateWithoutLessonsInput {
   bio: String!
   imageURL: String!
   startDate: DateTime!
-  currentEmployee: Boolean!
+  currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeCreateroleInput
   clients: StudentCreateManyInput
   classes: ClassCreateManyWithoutInstructorInput
@@ -2154,6 +2168,10 @@ enum EmployeeOrderByInput {
   startDate_DESC
   currentEmployee_ASC
   currentEmployee_DESC
+  lessonSinglePrice_ASC
+  lessonSinglePrice_DESC
+  lessonDoublePrice_ASC
+  lessonDoublePrice_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2177,561 +2195,10 @@ type EmployeePreviousValues {
   imageURL: String!
   startDate: DateTime!
   currentEmployee: Boolean!
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-input EmployeeScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [EmployeeScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [EmployeeScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [EmployeeScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  email: String
-
-  """All values that are not equal to given value."""
-  email_not: String
-
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
-  password: String
-
-  """All values that are not equal to given value."""
-  password_not: String
-
-  """All values that are contained in given list."""
-  password_in: [String!]
-
-  """All values that are not contained in given list."""
-  password_not_in: [String!]
-
-  """All values less than the given value."""
-  password_lt: String
-
-  """All values less than or equal the given value."""
-  password_lte: String
-
-  """All values greater than the given value."""
-  password_gt: String
-
-  """All values greater than or equal the given value."""
-  password_gte: String
-
-  """All values containing the given string."""
-  password_contains: String
-
-  """All values not containing the given string."""
-  password_not_contains: String
-
-  """All values starting with the given string."""
-  password_starts_with: String
-
-  """All values not starting with the given string."""
-  password_not_starts_with: String
-
-  """All values ending with the given string."""
-  password_ends_with: String
-
-  """All values not ending with the given string."""
-  password_not_ends_with: String
-  phone: String
-
-  """All values that are not equal to given value."""
-  phone_not: String
-
-  """All values that are contained in given list."""
-  phone_in: [String!]
-
-  """All values that are not contained in given list."""
-  phone_not_in: [String!]
-
-  """All values less than the given value."""
-  phone_lt: String
-
-  """All values less than or equal the given value."""
-  phone_lte: String
-
-  """All values greater than the given value."""
-  phone_gt: String
-
-  """All values greater than or equal the given value."""
-  phone_gte: String
-
-  """All values containing the given string."""
-  phone_contains: String
-
-  """All values not containing the given string."""
-  phone_not_contains: String
-
-  """All values starting with the given string."""
-  phone_starts_with: String
-
-  """All values not starting with the given string."""
-  phone_not_starts_with: String
-
-  """All values ending with the given string."""
-  phone_ends_with: String
-
-  """All values not ending with the given string."""
-  phone_not_ends_with: String
-  firstName: String
-
-  """All values that are not equal to given value."""
-  firstName_not: String
-
-  """All values that are contained in given list."""
-  firstName_in: [String!]
-
-  """All values that are not contained in given list."""
-  firstName_not_in: [String!]
-
-  """All values less than the given value."""
-  firstName_lt: String
-
-  """All values less than or equal the given value."""
-  firstName_lte: String
-
-  """All values greater than the given value."""
-  firstName_gt: String
-
-  """All values greater than or equal the given value."""
-  firstName_gte: String
-
-  """All values containing the given string."""
-  firstName_contains: String
-
-  """All values not containing the given string."""
-  firstName_not_contains: String
-
-  """All values starting with the given string."""
-  firstName_starts_with: String
-
-  """All values not starting with the given string."""
-  firstName_not_starts_with: String
-
-  """All values ending with the given string."""
-  firstName_ends_with: String
-
-  """All values not ending with the given string."""
-  firstName_not_ends_with: String
-  lastName: String
-
-  """All values that are not equal to given value."""
-  lastName_not: String
-
-  """All values that are contained in given list."""
-  lastName_in: [String!]
-
-  """All values that are not contained in given list."""
-  lastName_not_in: [String!]
-
-  """All values less than the given value."""
-  lastName_lt: String
-
-  """All values less than or equal the given value."""
-  lastName_lte: String
-
-  """All values greater than the given value."""
-  lastName_gt: String
-
-  """All values greater than or equal the given value."""
-  lastName_gte: String
-
-  """All values containing the given string."""
-  lastName_contains: String
-
-  """All values not containing the given string."""
-  lastName_not_contains: String
-
-  """All values starting with the given string."""
-  lastName_starts_with: String
-
-  """All values not starting with the given string."""
-  lastName_not_starts_with: String
-
-  """All values ending with the given string."""
-  lastName_ends_with: String
-
-  """All values not ending with the given string."""
-  lastName_not_ends_with: String
-  gender: Gender
-
-  """All values that are not equal to given value."""
-  gender_not: Gender
-
-  """All values that are contained in given list."""
-  gender_in: [Gender!]
-
-  """All values that are not contained in given list."""
-  gender_not_in: [Gender!]
-  address: String
-
-  """All values that are not equal to given value."""
-  address_not: String
-
-  """All values that are contained in given list."""
-  address_in: [String!]
-
-  """All values that are not contained in given list."""
-  address_not_in: [String!]
-
-  """All values less than the given value."""
-  address_lt: String
-
-  """All values less than or equal the given value."""
-  address_lte: String
-
-  """All values greater than the given value."""
-  address_gt: String
-
-  """All values greater than or equal the given value."""
-  address_gte: String
-
-  """All values containing the given string."""
-  address_contains: String
-
-  """All values not containing the given string."""
-  address_not_contains: String
-
-  """All values starting with the given string."""
-  address_starts_with: String
-
-  """All values not starting with the given string."""
-  address_not_starts_with: String
-
-  """All values ending with the given string."""
-  address_ends_with: String
-
-  """All values not ending with the given string."""
-  address_not_ends_with: String
-  city: String
-
-  """All values that are not equal to given value."""
-  city_not: String
-
-  """All values that are contained in given list."""
-  city_in: [String!]
-
-  """All values that are not contained in given list."""
-  city_not_in: [String!]
-
-  """All values less than the given value."""
-  city_lt: String
-
-  """All values less than or equal the given value."""
-  city_lte: String
-
-  """All values greater than the given value."""
-  city_gt: String
-
-  """All values greater than or equal the given value."""
-  city_gte: String
-
-  """All values containing the given string."""
-  city_contains: String
-
-  """All values not containing the given string."""
-  city_not_contains: String
-
-  """All values starting with the given string."""
-  city_starts_with: String
-
-  """All values not starting with the given string."""
-  city_not_starts_with: String
-
-  """All values ending with the given string."""
-  city_ends_with: String
-
-  """All values not ending with the given string."""
-  city_not_ends_with: String
-  state: String
-
-  """All values that are not equal to given value."""
-  state_not: String
-
-  """All values that are contained in given list."""
-  state_in: [String!]
-
-  """All values that are not contained in given list."""
-  state_not_in: [String!]
-
-  """All values less than the given value."""
-  state_lt: String
-
-  """All values less than or equal the given value."""
-  state_lte: String
-
-  """All values greater than the given value."""
-  state_gt: String
-
-  """All values greater than or equal the given value."""
-  state_gte: String
-
-  """All values containing the given string."""
-  state_contains: String
-
-  """All values not containing the given string."""
-  state_not_contains: String
-
-  """All values starting with the given string."""
-  state_starts_with: String
-
-  """All values not starting with the given string."""
-  state_not_starts_with: String
-
-  """All values ending with the given string."""
-  state_ends_with: String
-
-  """All values not ending with the given string."""
-  state_not_ends_with: String
-  zip: Int
-
-  """All values that are not equal to given value."""
-  zip_not: Int
-
-  """All values that are contained in given list."""
-  zip_in: [Int!]
-
-  """All values that are not contained in given list."""
-  zip_not_in: [Int!]
-
-  """All values less than the given value."""
-  zip_lt: Int
-
-  """All values less than or equal the given value."""
-  zip_lte: Int
-
-  """All values greater than the given value."""
-  zip_gt: Int
-
-  """All values greater than or equal the given value."""
-  zip_gte: Int
-  bio: String
-
-  """All values that are not equal to given value."""
-  bio_not: String
-
-  """All values that are contained in given list."""
-  bio_in: [String!]
-
-  """All values that are not contained in given list."""
-  bio_not_in: [String!]
-
-  """All values less than the given value."""
-  bio_lt: String
-
-  """All values less than or equal the given value."""
-  bio_lte: String
-
-  """All values greater than the given value."""
-  bio_gt: String
-
-  """All values greater than or equal the given value."""
-  bio_gte: String
-
-  """All values containing the given string."""
-  bio_contains: String
-
-  """All values not containing the given string."""
-  bio_not_contains: String
-
-  """All values starting with the given string."""
-  bio_starts_with: String
-
-  """All values not starting with the given string."""
-  bio_not_starts_with: String
-
-  """All values ending with the given string."""
-  bio_ends_with: String
-
-  """All values not ending with the given string."""
-  bio_not_ends_with: String
-  imageURL: String
-
-  """All values that are not equal to given value."""
-  imageURL_not: String
-
-  """All values that are contained in given list."""
-  imageURL_in: [String!]
-
-  """All values that are not contained in given list."""
-  imageURL_not_in: [String!]
-
-  """All values less than the given value."""
-  imageURL_lt: String
-
-  """All values less than or equal the given value."""
-  imageURL_lte: String
-
-  """All values greater than the given value."""
-  imageURL_gt: String
-
-  """All values greater than or equal the given value."""
-  imageURL_gte: String
-
-  """All values containing the given string."""
-  imageURL_contains: String
-
-  """All values not containing the given string."""
-  imageURL_not_contains: String
-
-  """All values starting with the given string."""
-  imageURL_starts_with: String
-
-  """All values not starting with the given string."""
-  imageURL_not_starts_with: String
-
-  """All values ending with the given string."""
-  imageURL_ends_with: String
-
-  """All values not ending with the given string."""
-  imageURL_not_ends_with: String
-  startDate: DateTime
-
-  """All values that are not equal to given value."""
-  startDate_not: DateTime
-
-  """All values that are contained in given list."""
-  startDate_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  startDate_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  startDate_lt: DateTime
-
-  """All values less than or equal the given value."""
-  startDate_lte: DateTime
-
-  """All values greater than the given value."""
-  startDate_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  startDate_gte: DateTime
-  currentEmployee: Boolean
-
-  """All values that are not equal to given value."""
-  currentEmployee_not: Boolean
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
 }
 
 type EmployeeSubscriptionPayload {
@@ -2773,27 +2240,6 @@ input EmployeeSubscriptionWhereInput {
   node: EmployeeWhereInput
 }
 
-input EmployeeUpdateDataInput {
-  email: String
-  password: String
-  phone: String
-  firstName: String
-  lastName: String
-  gender: Gender
-  address: String
-  city: String
-  state: String
-  zip: Int
-  bio: String
-  imageURL: String
-  startDate: DateTime
-  currentEmployee: Boolean
-  role: EmployeeUpdateroleInput
-  clients: StudentUpdateManyInput
-  classes: ClassUpdateManyWithoutInstructorInput
-  lessons: LessonUpdateManyWithoutInstructorInput
-}
-
 input EmployeeUpdateInput {
   email: String
   password: String
@@ -2809,40 +2255,12 @@ input EmployeeUpdateInput {
   imageURL: String
   startDate: DateTime
   currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeUpdateroleInput
   clients: StudentUpdateManyInput
   classes: ClassUpdateManyWithoutInstructorInput
   lessons: LessonUpdateManyWithoutInstructorInput
-}
-
-input EmployeeUpdateManyDataInput {
-  email: String
-  password: String
-  phone: String
-  firstName: String
-  lastName: String
-  gender: Gender
-  address: String
-  city: String
-  state: String
-  zip: Int
-  bio: String
-  imageURL: String
-  startDate: DateTime
-  currentEmployee: Boolean
-  role: EmployeeUpdateroleInput
-}
-
-input EmployeeUpdateManyInput {
-  create: [EmployeeCreateInput!]
-  connect: [EmployeeWhereUniqueInput!]
-  set: [EmployeeWhereUniqueInput!]
-  disconnect: [EmployeeWhereUniqueInput!]
-  delete: [EmployeeWhereUniqueInput!]
-  update: [EmployeeUpdateWithWhereUniqueNestedInput!]
-  updateMany: [EmployeeUpdateManyWithWhereNestedInput!]
-  deleteMany: [EmployeeScalarWhereInput!]
-  upsert: [EmployeeUpsertWithWhereUniqueNestedInput!]
 }
 
 input EmployeeUpdateManyMutationInput {
@@ -2860,12 +2278,9 @@ input EmployeeUpdateManyMutationInput {
   imageURL: String
   startDate: DateTime
   currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeUpdateroleInput
-}
-
-input EmployeeUpdateManyWithWhereNestedInput {
-  where: EmployeeScalarWhereInput!
-  data: EmployeeUpdateManyDataInput!
 }
 
 input EmployeeUpdateOneRequiredWithoutClassesInput {
@@ -2901,6 +2316,8 @@ input EmployeeUpdateWithoutClassesDataInput {
   imageURL: String
   startDate: DateTime
   currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeUpdateroleInput
   clients: StudentUpdateManyInput
   lessons: LessonUpdateManyWithoutInstructorInput
@@ -2921,14 +2338,11 @@ input EmployeeUpdateWithoutLessonsDataInput {
   imageURL: String
   startDate: DateTime
   currentEmployee: Boolean
+  lessonSinglePrice: Int
+  lessonDoublePrice: Int
   role: EmployeeUpdateroleInput
   clients: StudentUpdateManyInput
   classes: ClassUpdateManyWithoutInstructorInput
-}
-
-input EmployeeUpdateWithWhereUniqueNestedInput {
-  where: EmployeeWhereUniqueInput!
-  data: EmployeeUpdateDataInput!
 }
 
 input EmployeeUpsertWithoutClassesInput {
@@ -2939,12 +2353,6 @@ input EmployeeUpsertWithoutClassesInput {
 input EmployeeUpsertWithoutLessonsInput {
   update: EmployeeUpdateWithoutLessonsDataInput!
   create: EmployeeCreateWithoutLessonsInput!
-}
-
-input EmployeeUpsertWithWhereUniqueNestedInput {
-  where: EmployeeWhereUniqueInput!
-  update: EmployeeUpdateDataInput!
-  create: EmployeeCreateInput!
 }
 
 input EmployeeWhereInput {
@@ -3454,6 +2862,50 @@ input EmployeeWhereInput {
 
   """All values that are not equal to given value."""
   currentEmployee_not: Boolean
+  lessonSinglePrice: Int
+
+  """All values that are not equal to given value."""
+  lessonSinglePrice_not: Int
+
+  """All values that are contained in given list."""
+  lessonSinglePrice_in: [Int!]
+
+  """All values that are not contained in given list."""
+  lessonSinglePrice_not_in: [Int!]
+
+  """All values less than the given value."""
+  lessonSinglePrice_lt: Int
+
+  """All values less than or equal the given value."""
+  lessonSinglePrice_lte: Int
+
+  """All values greater than the given value."""
+  lessonSinglePrice_gt: Int
+
+  """All values greater than or equal the given value."""
+  lessonSinglePrice_gte: Int
+  lessonDoublePrice: Int
+
+  """All values that are not equal to given value."""
+  lessonDoublePrice_not: Int
+
+  """All values that are contained in given list."""
+  lessonDoublePrice_in: [Int!]
+
+  """All values that are not contained in given list."""
+  lessonDoublePrice_not_in: [Int!]
+
+  """All values less than the given value."""
+  lessonDoublePrice_lt: Int
+
+  """All values less than or equal the given value."""
+  lessonDoublePrice_lte: Int
+
+  """All values greater than the given value."""
+  lessonDoublePrice_gt: Int
+
+  """All values greater than or equal the given value."""
+  lessonDoublePrice_gte: Int
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -3527,8 +2979,7 @@ type Lesson implements Node {
   instructor: Employee!
   client(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   duration: Int!
-  calendarColor: Color!
-  price: Int!
+  type: LessonType!
   day: Day!
   time: DateTime!
   open: Boolean!
@@ -3549,8 +3000,7 @@ input LessonCreateInput {
   name: String!
   description: String!
   duration: Int!
-  calendarColor: Color!
-  price: Int!
+  type: LessonType!
   day: Day!
   time: DateTime!
   open: Boolean!
@@ -3573,8 +3023,7 @@ input LessonCreateWithoutClientInput {
   name: String!
   description: String!
   duration: Int!
-  calendarColor: Color!
-  price: Int!
+  type: LessonType!
   day: Day!
   time: DateTime!
   open: Boolean!
@@ -3586,8 +3035,7 @@ input LessonCreateWithoutInstructorInput {
   name: String!
   description: String!
   duration: Int!
-  calendarColor: Color!
-  price: Int!
+  type: LessonType!
   day: Day!
   time: DateTime!
   open: Boolean!
@@ -3612,10 +3060,8 @@ enum LessonOrderByInput {
   description_DESC
   duration_ASC
   duration_DESC
-  calendarColor_ASC
-  calendarColor_DESC
-  price_ASC
-  price_DESC
+  type_ASC
+  type_DESC
   day_ASC
   day_DESC
   time_ASC
@@ -3629,8 +3075,7 @@ type LessonPreviousValues {
   name: String!
   description: String!
   duration: Int!
-  calendarColor: Color!
-  price: Int!
+  type: LessonType!
   day: Day!
   time: DateTime!
   open: Boolean!
@@ -3787,38 +3232,16 @@ input LessonScalarWhereInput {
 
   """All values greater than or equal the given value."""
   duration_gte: Int
-  calendarColor: Color
+  type: LessonType
 
   """All values that are not equal to given value."""
-  calendarColor_not: Color
+  type_not: LessonType
 
   """All values that are contained in given list."""
-  calendarColor_in: [Color!]
+  type_in: [LessonType!]
 
   """All values that are not contained in given list."""
-  calendarColor_not_in: [Color!]
-  price: Int
-
-  """All values that are not equal to given value."""
-  price_not: Int
-
-  """All values that are contained in given list."""
-  price_in: [Int!]
-
-  """All values that are not contained in given list."""
-  price_not_in: [Int!]
-
-  """All values less than the given value."""
-  price_lt: Int
-
-  """All values less than or equal the given value."""
-  price_lte: Int
-
-  """All values greater than the given value."""
-  price_gt: Int
-
-  """All values greater than or equal the given value."""
-  price_gte: Int
+  type_not_in: [LessonType!]
   day: Day
 
   """All values that are not equal to given value."""
@@ -3896,12 +3319,16 @@ input LessonSubscriptionWhereInput {
   node: LessonWhereInput
 }
 
+enum LessonType {
+  ONE
+  TWO
+}
+
 input LessonUpdateInput {
   name: String
   description: String
   duration: Int
-  calendarColor: Color
-  price: Int
+  type: LessonType
   day: Day
   time: DateTime
   open: Boolean
@@ -3913,8 +3340,7 @@ input LessonUpdateManyDataInput {
   name: String
   description: String
   duration: Int
-  calendarColor: Color
-  price: Int
+  type: LessonType
   day: Day
   time: DateTime
   open: Boolean
@@ -3924,8 +3350,7 @@ input LessonUpdateManyMutationInput {
   name: String
   description: String
   duration: Int
-  calendarColor: Color
-  price: Int
+  type: LessonType
   day: Day
   time: DateTime
   open: Boolean
@@ -3964,8 +3389,7 @@ input LessonUpdateWithoutClientDataInput {
   name: String
   description: String
   duration: Int
-  calendarColor: Color
-  price: Int
+  type: LessonType
   day: Day
   time: DateTime
   open: Boolean
@@ -3976,8 +3400,7 @@ input LessonUpdateWithoutInstructorDataInput {
   name: String
   description: String
   duration: Int
-  calendarColor: Color
-  price: Int
+  type: LessonType
   day: Day
   time: DateTime
   open: Boolean
@@ -4157,38 +3580,16 @@ input LessonWhereInput {
 
   """All values greater than or equal the given value."""
   duration_gte: Int
-  calendarColor: Color
+  type: LessonType
 
   """All values that are not equal to given value."""
-  calendarColor_not: Color
+  type_not: LessonType
 
   """All values that are contained in given list."""
-  calendarColor_in: [Color!]
+  type_in: [LessonType!]
 
   """All values that are not contained in given list."""
-  calendarColor_not_in: [Color!]
-  price: Int
-
-  """All values that are not equal to given value."""
-  price_not: Int
-
-  """All values that are contained in given list."""
-  price_in: [Int!]
-
-  """All values that are not contained in given list."""
-  price_not_in: [Int!]
-
-  """All values less than the given value."""
-  price_lt: Int
-
-  """All values less than or equal the given value."""
-  price_lte: Int
-
-  """All values greater than the given value."""
-  price_gt: Int
-
-  """All values greater than or equal the given value."""
-  price_gte: Int
+  type_not_in: [LessonType!]
   day: Day
 
   """All values that are not equal to given value."""
@@ -4244,7 +3645,7 @@ scalar Long
 type MedicalCondition implements Node {
   id: ID!
   description: String!
-  student(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
+  student: Student
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -4262,7 +3663,7 @@ type MedicalConditionConnection {
 input MedicalConditionCreateInput {
   id: ID
   description: String!
-  student: StudentCreateManyWithoutMedicalInput
+  student: StudentCreateOneWithoutMedicalInput
 }
 
 input MedicalConditionCreateManyWithoutStudentInput {
@@ -4478,7 +3879,7 @@ input MedicalConditionSubscriptionWhereInput {
 
 input MedicalConditionUpdateInput {
   description: String
-  student: StudentUpdateManyWithoutMedicalInput
+  student: StudentUpdateOneWithoutMedicalInput
 }
 
 input MedicalConditionUpdateManyDataInput {
@@ -4654,9 +4055,7 @@ input MedicalConditionWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  student_every: StudentWhereInput
-  student_some: StudentWhereInput
-  student_none: StudentWhereInput
+  student: StudentWhereInput
 }
 
 input MedicalConditionWhereUniqueInput {
@@ -4665,45 +4064,45 @@ input MedicalConditionWhereUniqueInput {
 
 type Mutation {
   createAccountAdmin(data: AccountAdminCreateInput!): AccountAdmin!
+  createEmployee(data: EmployeeCreateInput!): Employee!
   createMedicalCondition(data: MedicalConditionCreateInput!): MedicalCondition!
   createClass(data: ClassCreateInput!): Class!
   createLesson(data: LessonCreateInput!): Lesson!
-  createEmployee(data: EmployeeCreateInput!): Employee!
   createStudent(data: StudentCreateInput!): Student!
   createAgeGroup(data: AgeGroupCreateInput!): AgeGroup!
   updateAccountAdmin(data: AccountAdminUpdateInput!, where: AccountAdminWhereUniqueInput!): AccountAdmin
+  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee
   updateMedicalCondition(data: MedicalConditionUpdateInput!, where: MedicalConditionWhereUniqueInput!): MedicalCondition
   updateClass(data: ClassUpdateInput!, where: ClassWhereUniqueInput!): Class
   updateLesson(data: LessonUpdateInput!, where: LessonWhereUniqueInput!): Lesson
-  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee
   updateStudent(data: StudentUpdateInput!, where: StudentWhereUniqueInput!): Student
   updateAgeGroup(data: AgeGroupUpdateInput!, where: AgeGroupWhereUniqueInput!): AgeGroup
   deleteAccountAdmin(where: AccountAdminWhereUniqueInput!): AccountAdmin
+  deleteEmployee(where: EmployeeWhereUniqueInput!): Employee
   deleteMedicalCondition(where: MedicalConditionWhereUniqueInput!): MedicalCondition
   deleteClass(where: ClassWhereUniqueInput!): Class
   deleteLesson(where: LessonWhereUniqueInput!): Lesson
-  deleteEmployee(where: EmployeeWhereUniqueInput!): Employee
   deleteStudent(where: StudentWhereUniqueInput!): Student
   deleteAgeGroup(where: AgeGroupWhereUniqueInput!): AgeGroup
   upsertAccountAdmin(where: AccountAdminWhereUniqueInput!, create: AccountAdminCreateInput!, update: AccountAdminUpdateInput!): AccountAdmin!
+  upsertEmployee(where: EmployeeWhereUniqueInput!, create: EmployeeCreateInput!, update: EmployeeUpdateInput!): Employee!
   upsertMedicalCondition(where: MedicalConditionWhereUniqueInput!, create: MedicalConditionCreateInput!, update: MedicalConditionUpdateInput!): MedicalCondition!
   upsertClass(where: ClassWhereUniqueInput!, create: ClassCreateInput!, update: ClassUpdateInput!): Class!
   upsertLesson(where: LessonWhereUniqueInput!, create: LessonCreateInput!, update: LessonUpdateInput!): Lesson!
-  upsertEmployee(where: EmployeeWhereUniqueInput!, create: EmployeeCreateInput!, update: EmployeeUpdateInput!): Employee!
   upsertStudent(where: StudentWhereUniqueInput!, create: StudentCreateInput!, update: StudentUpdateInput!): Student!
   upsertAgeGroup(where: AgeGroupWhereUniqueInput!, create: AgeGroupCreateInput!, update: AgeGroupUpdateInput!): AgeGroup!
   updateManyAccountAdmins(data: AccountAdminUpdateManyMutationInput!, where: AccountAdminWhereInput): BatchPayload!
+  updateManyEmployees(data: EmployeeUpdateManyMutationInput!, where: EmployeeWhereInput): BatchPayload!
   updateManyMedicalConditions(data: MedicalConditionUpdateManyMutationInput!, where: MedicalConditionWhereInput): BatchPayload!
   updateManyClasses(data: ClassUpdateManyMutationInput!, where: ClassWhereInput): BatchPayload!
   updateManyLessons(data: LessonUpdateManyMutationInput!, where: LessonWhereInput): BatchPayload!
-  updateManyEmployees(data: EmployeeUpdateManyMutationInput!, where: EmployeeWhereInput): BatchPayload!
   updateManyStudents(data: StudentUpdateManyMutationInput!, where: StudentWhereInput): BatchPayload!
   updateManyAgeGroups(data: AgeGroupUpdateManyMutationInput!, where: AgeGroupWhereInput): BatchPayload!
   deleteManyAccountAdmins(where: AccountAdminWhereInput): BatchPayload!
+  deleteManyEmployees(where: EmployeeWhereInput): BatchPayload!
   deleteManyMedicalConditions(where: MedicalConditionWhereInput): BatchPayload!
   deleteManyClasses(where: ClassWhereInput): BatchPayload!
   deleteManyLessons(where: LessonWhereInput): BatchPayload!
-  deleteManyEmployees(where: EmployeeWhereInput): BatchPayload!
   deleteManyStudents(where: StudentWhereInput): BatchPayload!
   deleteManyAgeGroups(where: AgeGroupWhereInput): BatchPayload!
 }
@@ -4737,24 +4136,24 @@ type PageInfo {
 
 type Query {
   accountAdmins(where: AccountAdminWhereInput, orderBy: AccountAdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AccountAdmin]!
+  employees(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Employee]!
   medicalConditions(where: MedicalConditionWhereInput, orderBy: MedicalConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MedicalCondition]!
   classes(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Class]!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson]!
-  employees(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Employee]!
   students(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student]!
   ageGroups(where: AgeGroupWhereInput, orderBy: AgeGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AgeGroup]!
   accountAdmin(where: AccountAdminWhereUniqueInput!): AccountAdmin
+  employee(where: EmployeeWhereUniqueInput!): Employee
   medicalCondition(where: MedicalConditionWhereUniqueInput!): MedicalCondition
   class(where: ClassWhereUniqueInput!): Class
   lesson(where: LessonWhereUniqueInput!): Lesson
-  employee(where: EmployeeWhereUniqueInput!): Employee
   student(where: StudentWhereUniqueInput!): Student
   ageGroup(where: AgeGroupWhereUniqueInput!): AgeGroup
   accountAdminsConnection(where: AccountAdminWhereInput, orderBy: AccountAdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AccountAdminConnection!
+  employeesConnection(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EmployeeConnection!
   medicalConditionsConnection(where: MedicalConditionWhereInput, orderBy: MedicalConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MedicalConditionConnection!
   classesConnection(where: ClassWhereInput, orderBy: ClassOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassConnection!
   lessonsConnection(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LessonConnection!
-  employeesConnection(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EmployeeConnection!
   studentsConnection(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StudentConnection!
   ageGroupsConnection(where: AgeGroupWhereInput, orderBy: AgeGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AgeGroupConnection!
 
@@ -4837,9 +4236,9 @@ input StudentCreateManyWithoutLessonsInput {
   connect: [StudentWhereUniqueInput!]
 }
 
-input StudentCreateManyWithoutMedicalInput {
-  create: [StudentCreateWithoutMedicalInput!]
-  connect: [StudentWhereUniqueInput!]
+input StudentCreateOneWithoutMedicalInput {
+  create: StudentCreateWithoutMedicalInput
+  connect: StudentWhereUniqueInput
 }
 
 input StudentCreateWithoutAdminInput {
@@ -5297,21 +4696,18 @@ input StudentUpdateManyWithoutLessonsInput {
   upsert: [StudentUpsertWithWhereUniqueWithoutLessonsInput!]
 }
 
-input StudentUpdateManyWithoutMedicalInput {
-  create: [StudentCreateWithoutMedicalInput!]
-  connect: [StudentWhereUniqueInput!]
-  set: [StudentWhereUniqueInput!]
-  disconnect: [StudentWhereUniqueInput!]
-  delete: [StudentWhereUniqueInput!]
-  update: [StudentUpdateWithWhereUniqueWithoutMedicalInput!]
-  updateMany: [StudentUpdateManyWithWhereNestedInput!]
-  deleteMany: [StudentScalarWhereInput!]
-  upsert: [StudentUpsertWithWhereUniqueWithoutMedicalInput!]
-}
-
 input StudentUpdateManyWithWhereNestedInput {
   where: StudentScalarWhereInput!
   data: StudentUpdateManyDataInput!
+}
+
+input StudentUpdateOneWithoutMedicalInput {
+  create: StudentCreateWithoutMedicalInput
+  connect: StudentWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: StudentUpdateWithoutMedicalDataInput
+  upsert: StudentUpsertWithoutMedicalInput
 }
 
 input StudentUpdateWithoutAdminDataInput {
@@ -5382,9 +4778,9 @@ input StudentUpdateWithWhereUniqueWithoutLessonsInput {
   data: StudentUpdateWithoutLessonsDataInput!
 }
 
-input StudentUpdateWithWhereUniqueWithoutMedicalInput {
-  where: StudentWhereUniqueInput!
-  data: StudentUpdateWithoutMedicalDataInput!
+input StudentUpsertWithoutMedicalInput {
+  update: StudentUpdateWithoutMedicalDataInput!
+  create: StudentCreateWithoutMedicalInput!
 }
 
 input StudentUpsertWithWhereUniqueNestedInput {
@@ -5409,12 +4805,6 @@ input StudentUpsertWithWhereUniqueWithoutLessonsInput {
   where: StudentWhereUniqueInput!
   update: StudentUpdateWithoutLessonsDataInput!
   create: StudentCreateWithoutLessonsInput!
-}
-
-input StudentUpsertWithWhereUniqueWithoutMedicalInput {
-  where: StudentWhereUniqueInput!
-  update: StudentUpdateWithoutMedicalDataInput!
-  create: StudentCreateWithoutMedicalInput!
 }
 
 input StudentWhereInput {
@@ -5669,10 +5059,10 @@ input StudentWhereUniqueInput {
 
 type Subscription {
   accountAdmin(where: AccountAdminSubscriptionWhereInput): AccountAdminSubscriptionPayload
+  employee(where: EmployeeSubscriptionWhereInput): EmployeeSubscriptionPayload
   medicalCondition(where: MedicalConditionSubscriptionWhereInput): MedicalConditionSubscriptionPayload
   class(where: ClassSubscriptionWhereInput): ClassSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
-  employee(where: EmployeeSubscriptionWhereInput): EmployeeSubscriptionPayload
   student(where: StudentSubscriptionWhereInput): StudentSubscriptionPayload
   ageGroup(where: AgeGroupSubscriptionWhereInput): AgeGroupSubscriptionPayload
 }
