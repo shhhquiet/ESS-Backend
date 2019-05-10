@@ -46,7 +46,7 @@ type Student {
 	updatedAt: DateTime! @updatedAt
 }
 
-type AccountAdmin { # for parents since they'll have control over payments, etc.
+type Client { # for parents since they'll have control over payments, etc.
 	id: ID! @id
 	email: String! @unique
 	password: String!
@@ -81,7 +81,7 @@ type Employee {
 	role: [Role] @scalarList(strategy: RELATION)
 	imageURL: String!
 	startDate: DateTime!
-	currentEmployee: Boolean! @default(value: true) 
+	currentEmployee: Boolean! @default(value: true)
 	clients: [Student!]!
 	classes: [Class!]!
 	lessons: [Lesson!]!
