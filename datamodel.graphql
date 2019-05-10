@@ -81,7 +81,7 @@ type Employee {
 	role: [Role] @scalarList(strategy: RELATION)
 	imageURL: String!
 	startDate: DateTime!
-	currentEmployee: Boolean! @default 
+	currentEmployee: Boolean! @default(value: true) 
 	clients: [Student!]!
 	classes: [Class!]!
 	lessons: [Lesson!]!
