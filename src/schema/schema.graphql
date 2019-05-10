@@ -1,27 +1,26 @@
 # import * from '../generated/prisma.graphql'
 
 type Mutation {
-  signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
-  signupEmployee(data: AddEmployeeInput!): Employee!
+	signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
+	signupEmployee(data: AddEmployeeInput!): Employee!
 	signin(email: String!, password: String!): User!
-  signinEmployee(email: String!, password: String!): Employee!
+	signinEmployee(email: String!, password: String!): Employee!
 	requestReset(email: String!): String
 	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
 	signout: String
-
 }
 
 type Query {
-  employees: [Employee]
-  users: [User]
-  currentUser: User
+	employees: [Employee]
+	users: [User]
+	currentUser: User
+	lessons: [Lesson]
 }
 
-
 type Employee {
-	id: ID! 
-	email: String! 
+	id: ID!
+	email: String!
 	password: String!
 	phone: String!
 	firstName: String!
@@ -39,65 +38,64 @@ type Employee {
 	clients: [Student]
 	classes: [Class]
 	lessons: [Lesson]
-  lessonSinglePrice: Int
+	lessonSinglePrice: Int
 	lessonDoublePrice: Int
-	createdAt: DateTime! 
-	updatedAt: DateTime! 
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 input AddEmployeeInput {
-  email: String!
-  password: String!
-  phone: String!
-  firstName: String!
-  lastName: String!
-  gender: String!
-  address: String!
-  city: String!
-  state: String!
-  zip: Int!
-  bio: String!
-  imageURL: String!
-  role: [Role!]
+	email: String!
+	password: String!
+	phone: String!
+	firstName: String!
+	lastName: String!
+	gender: String!
+	address: String!
+	city: String!
+	state: String!
+	zip: Int!
+	bio: String!
+	imageURL: String!
+	role: [Role!]
 }
 
-
 type MedicalCondition {
-  id: ID! 
-  description: String!
-  student: Student
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID!
+	description: String!
+	student: Student
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 type Class {
-  id: ID! 
-  name: String
-  description: String!
-  ageGroup: AgeGroup!
-  level: SkillLevel!
-  capacity: Int!
-  price: Int!
-  day: Day!
-  instructor: Employee! # can there be multiple instructors for a class?
-  duration: Int! # 30 45 or 60 min
-  students: [Student]!
-  time: DateTime! # may want to make this one be a string, not sure
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID!
+	name: String
+	description: String!
+	ageGroup: AgeGroup!
+	level: SkillLevel!
+	capacity: Int!
+	price: Int!
+	day: Day!
+	instructor: Employee! # can there be multiple instructors for a class?
+	duration: Int! # 30 45 or 60 min
+	students: [Student]!
+	time: DateTime! # may want to make this one be a string, not sure
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 type Lesson {
-  id: ID! 
-  name: String!
-  description: String!
-  instructor: Employee! 
-  client: [Student]
-  duration: Int!
-  type: LessonType!
+	id: ID!
+	name: String!
+	description: String!
+	instructor: Employee!
+	client: [Student]
+	duration: Int!
+	type: LessonType!
 	day: Day!
-  time: DateTime!
-  open: Boolean!
+	time: DateTime!
+	open: Boolean!
 }
 
 type AgeGroup {
@@ -110,24 +108,24 @@ type AgeGroup {
 }
 
 type Student {
-  id: ID! 
-  firstName: String!
-  lastName: String!
-  birthday: String!
-  skill: SkillLevel!
-  ageGroup: AgeGroup!
-  classes: [Class!]!
-  lessons: [Lesson!]!
-  gender: Gender!
-  admin: AccountAdmin
-  medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
-  createdAt: DateTime!
-  updatedAt: DateTime!
+	id: ID!
+	firstName: String!
+	lastName: String!
+	birthday: String!
+	skill: SkillLevel!
+	ageGroup: AgeGroup!
+	classes: [Class!]!
+	lessons: [Lesson!]!
+	gender: Gender!
+	admin: AccountAdmin
+	medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 type AccountAdmin { # for parents since they'll have control over payments, etc.
-	id: ID! 
-	email: String! 
+	id: ID!
+	email: String!
 	password: String!
 	firstName: String!
 	lastName: String!
@@ -140,8 +138,8 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
 	stripeId: String # if we use stripe for charges
 	resetToken: String
 	resetTokenExpiry: String
-	createdAt: DateTime! 
-	updatedAt: DateTime! 
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 union User = AccountAdmin | Student | Employee
