@@ -33,6 +33,7 @@ module.exports = {
 				  });
 
 		console.log(res, resetToken); // check things are set correctly
+
 		// const mailRes = await transport.sendMail({
 		// 	from: 'support@up4.life',
 		// 	to: user.email,
@@ -50,7 +51,7 @@ module.exports = {
 
 		const user = await query.node({
 			where: {
-				resetToken: resetToken,
+				resetToken,
 				resetTokenExpiry_gte: Date.now() - 3600000 // make sure token is within 1hr limit
 			}
 		});
