@@ -11,7 +11,7 @@ module.exports = {
 		const user = await mutation.createClient(
 			{
 				data: {
-					...args,
+					...args.data,
 					password
 				}
 			},
@@ -85,5 +85,17 @@ module.exports = {
 		});
 
 		return updatedStudent;
+	},
+	async cancelLesson(parent, { lessonId, studentId }, { userId, mutation }, info) {
+		if (!userId) throw new Error("c'mon maaaannnn");
+		// might be nice to add in a check to see if it's less than 24hr before a lesson so they can't cancel or they have to call
+		await mutation.updateLesson({
+			where: { id: lessonId },
+			data: { client: { delete: { id: studentId } } }
+		});
+
+		// maybe add something in here to email the instructor and notify them if the lesson gets cancelled
+
+		return { message: 'Your instructor has been notified of your cancellation' };
 	}
 };

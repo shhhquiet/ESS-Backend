@@ -19,7 +19,7 @@ type Mutation {
 		newPassword2: String!
 		role: String!
 	): User!
-	signout: String
+	signout: SuccessMessage!
 	createLesson(data: LessonCreateInput!): Lesson!
 	bookLesson(lessonId: ID!, studentId: ID!): Lesson!
 	createClass(classInfo: CreateClassInput!): Class!
@@ -27,6 +27,7 @@ type Mutation {
 	createAgeGroup(groupDetails: AgeGroupCreateInput!): AgeGroup!
 	createStudent(studentInfo: StudentCreateInput!): Client
 	addMedical(medicalInfo: MedicalConditionCreateInput!): Student!
+	cancelLesson(lessonId: ID!, studentId: ID!): SuccessMessage!
 }
 
 type Query {
@@ -39,6 +40,10 @@ type Query {
 	instructorLessons: [Lesson]
 	instructorClasses: [Class]
 	studentMedical: [MedicalCondition]
+}
+
+type SuccessMessage {
+	message: String!
 }
 
 type ClassesAndLessons {

@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const {
-	prisma: { query }
-} = require('../db');
+const { prisma } = require('../db');
+
 const userObject = `{
   id
   firstName
@@ -12,14 +11,13 @@ const userObject = `{
 module.exports = {
 	isAuth: async function(req, res, next) {
 		const { token } = req.cookies;
-	
+
 		if (token) {
 			try {
-			const { userId } = jwt.verify(token, process.env.APP_SECRET);
-			req.userId = userId;
-			
-			} catch(e) {
-				next(e)
+				const { userId } = jwt.verify(token, process.env.APP_SECRET);
+				req.userId = userId;
+			} catch (e) {
+				next(e);
 			}
 		}
 		next();
@@ -29,19 +27,18 @@ module.exports = {
 		const id = req.userId;
 		if (!id) return next();
 
-		const user = await query.employee({ where: { id } }, userObject);
+		const user = await prisma.query.node({ where: { id } }, userObject);
 		req.user = user;
 
 		next();
 	},
 
 	errorHandler: function(err, req, res, next) {
-		console.log(err)
-		if (res.headersSent) {
-			return next(err);
-		}
-		
-		status = err.status || 500
+		if (res.headersSent) return next(err);
+
+		console.log(err);
+
+		status = err.status || 500;
 		res.status(status).json(err);
 	}
 };

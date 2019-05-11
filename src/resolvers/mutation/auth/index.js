@@ -9,14 +9,11 @@ module.exports = {
 			domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
 		});
 
-		return { message: 'Goodbye!' };
+		return { message: 'Have a nice day!' };
 	},
 	async requestReset(parent, { email, role }, { query, mutation }, info) {
-		// request reset based on either employee or client role
-		const user =
-			role !== 'client'
-				? await query.employees({ where: { email } })
-				: await query.client({ where: { email } });
+		// query on node so we can return either employee or client types
+		const user = await query.node({ where: { email } });
 
 		if (!user) throw new Error(`No such user found for email ${email}`);
 		// get a random string of numbers/letters then make it hex
@@ -51,17 +48,13 @@ module.exports = {
 		const { password, confirmPassword, resetToken, role } = args;
 		if (password !== confirmPassword) throw new Error('Passwords must match!');
 
-		const [user] =
-			role !== 'client'
-				? await query.employees({
-						where: {
-							resetToken: resetToken,
-							resetTokenExpiry_gte: Date.now() - 3600000 // make sure token is within 1hr limit
-						}
-				  })
-				: await query.client({
-						where: { resetToken, resetTokenExpiry_gte: Date.now() - 360000 }
-				  });
+		const user = await query.node({
+			where: {
+				resetToken: resetToken,
+				resetTokenExpiry_gte: Date.now() - 3600000 // make sure token is within 1hr limit
+			}
+		});
+
 		if (!user) throw new Error('This token is either invalid or expired');
 
 		const updatedPass = await bcrypt.hash(password, 10);
@@ -103,7 +96,7 @@ module.exports = {
 		const newPassword = await bcrypt.hash(newPassword1, 10);
 		// update password dependent on if role provided is client or not
 		const updatedUser =
-			role !== 'Client'
+			role !== 'client'
 				? await mutation.updateEmployee({ where: { id: user.id }, data: { password: newPassword } })
 				: await mutation.updateClient({
 						where: { id: user.id },
