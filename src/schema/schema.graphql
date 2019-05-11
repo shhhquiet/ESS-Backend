@@ -89,10 +89,10 @@ type Class {
 	capacity: Int!
 	price: Int!
 	day: Day!
-	instructor: Employee! # can there be multiple instructors for a class?
+	instructor: Employee!
 	duration: Int! # 30 45 or 60 min
 	students: [Student]!
-	time: DateTime! # may want to make this one be a string, not sure
+	time: DateTime!
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }

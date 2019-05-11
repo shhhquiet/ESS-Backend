@@ -1642,6 +1642,7 @@ input EmployeeWhereUniqueInput {
 enum Gender {
   MALE
   FEMALE
+  OTHER
 }
 
 type Lesson {
@@ -1838,8 +1839,8 @@ input LessonSubscriptionWhereInput {
 }
 
 enum LessonType {
-  ONE
-  TWO
+  SINGLE
+  PAIR
 }
 
 input LessonUpdateInput {

@@ -368,11 +368,11 @@ export type Day =
   | "FRIDAY"
   | "SATURDAY";
 
-export type Gender = "MALE" | "FEMALE";
+export type Gender = "MALE" | "FEMALE" | "OTHER";
 
 export type Role = "ADMIN" | "INSTRUCTOR" | "FRONT_DESK";
 
-export type LessonType = "ONE" | "TWO";
+export type LessonType = "SINGLE" | "PAIR";
 
 export type StudentOrderByInput =
   | "id_ASC"

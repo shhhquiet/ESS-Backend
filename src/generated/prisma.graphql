@@ -1,5 +1,5 @@
 # source: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
-# timestamp: Fri May 10 2019 19:24:35 GMT-0500 (Central Daylight Time)
+# timestamp: Fri May 10 2019 19:31:46 GMT-0500 (Central Daylight Time)
 
 type AgeGroup implements Node {
   id: ID!
@@ -2970,6 +2970,7 @@ input EmployeeWhereUniqueInput {
 enum Gender {
   MALE
   FEMALE
+  OTHER
 }
 
 type Lesson implements Node {
@@ -3320,8 +3321,8 @@ input LessonSubscriptionWhereInput {
 }
 
 enum LessonType {
-  ONE
-  TWO
+  SINGLE
+  PAIR
 }
 
 input LessonUpdateInput {

@@ -1,6 +1,7 @@
 enum Gender {
 	MALE
 	FEMALE
+	OTHER
 }
 
 enum Role {
@@ -16,8 +17,8 @@ enum SkillLevel {
 }
 
 enum LessonType {
-	ONE
-	TWO
+	SINGLE
+	PAIR
 }
 
 enum Day {
@@ -40,13 +41,13 @@ type Student {
 	classes: [Class!]!
 	lessons: [Lesson!]!
 	gender: Gender!
-	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
+	medical: [MedicalCondition!]!
 	admin: Client @relation(link: INLINE)
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
 
-type Client { # for parents since they'll have control over payments, etc.
+type Client {
 	id: ID! @id
 	email: String! @unique
 	password: String!
@@ -58,7 +59,7 @@ type Client { # for parents since they'll have control over payments, etc.
 	state: String!
 	zip: Int!
 	students: [Student!]!
-	stripeId: String # if we use stripe for charges
+	stripeId: String
 	resetToken: String
 	resetTokenExpiry: String
 	createdAt: DateTime! @createdAt
@@ -120,7 +121,7 @@ type Lesson {
 	id: ID! @id
 	name: String!
 	description: String!
-	instructor: Employee! # @relation(name: "LessonInstructor")
+	instructor: Employee!
 	client: [Student]
 	duration: Int!
 	type: LessonType!
