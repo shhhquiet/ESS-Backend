@@ -2,10 +2,69 @@ const jwt = require('jsonwebtoken');
 const { prisma } = require('../db');
 
 const userObject = `{
-  id
-  firstName
-  lastName
-  email
+  __typename
+  ...on Employee {
+    id
+    firstName
+    lastName
+    imageURL
+    role
+    lessonSinglePrice
+    lessonDoublePrice
+    classes {
+      id
+      day
+      time
+      ageGroup {
+        id
+        minAge
+        name
+      }
+      level
+      price
+      duration
+      students {
+        id
+        firstName
+        lastName
+      }
+    }
+    lessons {
+      id
+      name
+      duration
+      type
+      day
+      time
+      open
+      client {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+  ...on Client {
+    id
+    firstName
+    lastName
+    email
+    stripeId
+    students {
+      id
+      firstName
+      skill
+      ageGroup {
+        id
+        name
+        minAge
+      }
+      medical {
+        id
+        description
+      }
+    }
+  }
 }`;
 
 module.exports = {
@@ -14,8 +73,9 @@ module.exports = {
 
 		if (token) {
 			try {
-				const { userId } = jwt.verify(token, process.env.APP_SECRET);
+				const { userId, role } = jwt.verify(token, process.env.APP_SECRET);
 				req.userId = userId;
+				req.role = role;
 			} catch (e) {
 				next(e);
 			}
@@ -27,8 +87,13 @@ module.exports = {
 		const id = req.userId;
 		if (!id) return next();
 
-		const user = await prisma.query.node({ where: { id } }, userObject);
-		req.user = user;
+		try {
+			const user = await prisma.query.node({ id }, userObject);
+			console.log(user, 'user here');
+			req.user = user;
+		} catch (e) {
+			console.log(e);
+		}
 
 		next();
 	},

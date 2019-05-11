@@ -24,32 +24,36 @@ module.exports = {
 			info
 		);
 
-		const token = await jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+		const token = await jwt.sign({ userId: user.id, role: user.role }, process.env.APP_SECRET);
 		res.cookie('token', token, {
 			httpOnly: true,
-			maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year cookie
+			maxAge: 1000 * 60 * 60 * 24 * 10, // 1 year cookie
 			domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
 		});
 
 		return user;
 	},
 	async employeeSignin(parent, { email, password }, { query, res }, info) {
-		const user = await query.employee({ where: { email } });
-		if (!user) throw new Error(`No such user found for email ${email}`);
+		try {
+			const user = await query.employee({ where: { email } });
+			// if (!user) throw new Error(`No such user found for email ${email}`);
 
-		const valid = await bcrypt.compare(password, user.password);
+			const valid = await bcrypt.compare(password, user.password);
 
-		if (!valid) throw new Error('Invalid Password!');
+			// if (!valid) throw new Error('Invalid Password!');
 
-		const token = await jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+			const token = await jwt.sign({ userId: user.id, role: user.role }, process.env.APP_SECRET);
 
-		res.cookie('token', token, {
-			httpOnly: true,
-			maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year long cookie bc why not. FIGHT ME
-			domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
-		});
+			res.cookie('token', token, {
+				httpOnly: true,
+				maxAge: 1000 * 60 * 60 * 24 * 10, // 1 year long cookie bc why not. FIGHT ME
+				domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'WILL_NEED_TO_CHANGE'
+			});
 
-		return user;
+			return user;
+		} catch (e) {
+			console.log(e);
+		}
 	},
 	async createLesson(parent, args, { userId, mutation }, info) {
 		if (!userId) throw new Error('hey staaahp');

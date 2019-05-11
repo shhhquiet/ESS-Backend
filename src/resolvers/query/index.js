@@ -12,9 +12,8 @@ module.exports = {
 	...EmployeeQueries,
 	...ClientQueries,
 
-	async currentUser(parent, args, { userId, query }, info) {
+	async currentUser(parent, args, { userId, user, query }, info) {
 		if (!userId) return null;
-		// console.log(query);
 
 		return query.node({ id: userId }, info);
 	}
