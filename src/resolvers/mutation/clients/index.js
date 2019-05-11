@@ -13,14 +13,6 @@ module.exports = {
 				data: {
 					...args,
 					password
-					// permissions: 'FREE', // default permission for user is FREE tier
-					// img: {
-					// 	create: {
-					// 		img_url:
-					// 			'https://res.cloudinary.com/dcwn6afsq/image/upload/v1552598409/up4/autftv4fj3l7qlkkt56j.jpg', // default avatar img if none provided
-					// 		default: true
-					// 	}
-					// }
 				}
 			},
 			info
@@ -43,7 +35,6 @@ module.exports = {
 		if (!validPassword) throw new Error('Invalid Password!');
 
 		const token = await jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-
 		res.cookie('token', token, {
 			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year long cookie bc why not. FIGHT ME
@@ -77,7 +68,6 @@ module.exports = {
 	},
 	async createStudent(parent, { studentInfo }, { userId, mutation }, info) {
 		if (!userId) throw new Error("c'mon maaaannnn");
-		// const student = await mutation.createStudent({data: {...args.data}})
 
 		const updatedClient = await mutation.updateClient({
 			where: { id: userId },
@@ -86,12 +76,12 @@ module.exports = {
 
 		return updatedClient;
 	},
-	async addMedical(parent, args, { userId, mutation }, info) {
+	async addMedical(parent, { medicalInfo }, { userId, mutation }, info) {
 		if (!userId) throw new Error("c'mon maaaannnn");
 
 		const updatedStudent = await mutation.updateStudent({
 			where: { id: userId },
-			data: { medical: { create: { ...args.medicalInfo } } }
+			data: { medical: { create: { ...medicalInfo } } }
 		});
 
 		return updatedStudent;

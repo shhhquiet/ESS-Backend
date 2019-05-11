@@ -14,7 +14,7 @@ module.exports = {
 
 	async currentUser(parent, args, { userId, query }, info) {
 		if (!userId) return null;
-		console.log(query);
+		// console.log(query);
 
 		return query.node({ id: userId }, info);
 	}
