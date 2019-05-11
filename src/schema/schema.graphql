@@ -9,6 +9,8 @@ type Mutation {
 	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
 	signout: String
+	createLesson(data: LessonCreateInput!): Lesson!
+	bookLesson(lessonId: ID!): Lesson!
 }
 
 type Query {
@@ -18,6 +20,7 @@ type Query {
 	lessons: [Lesson]
 	classes: [Class]
 	fullSchedule: ClassesAndLessons
+	instructorLessons: [Lesson]
 }
 
 type ClassesAndLessons {
@@ -106,12 +109,12 @@ type Lesson {
 }
 
 type AgeGroup {
-	id: ID! 
+	id: ID!
 	name: String!
 	minAge: Int!
 	maxAge: Int
-	createdAt: DateTime! 
-	updatedAt: DateTime! 
+	createdAt: DateTime!
+	updatedAt: DateTime!
 }
 
 type Student {
