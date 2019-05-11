@@ -1,12 +1,11 @@
 endpoint: ${env:PRISMA_ENDPOINT}
-# endpoint: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
 datamodel: datamodel.graphql
 secret: ${env:PRISMA_SECRET}
 generate:
   - generator: javascript-client
     output: ./src/generated/prisma-client
-# seed:
-#   run: node ./src/seedGenres.js
+seed:
+  run: node ./src/db/seeds/index.js
 hooks:
   post-deploy:
     - graphql get-schema -p prisma

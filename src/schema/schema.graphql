@@ -1,16 +1,33 @@
 # import * from '../generated/prisma.graphql'
 
 type Mutation {
-	signup(email: String!, password: String!, firstName: String!, lastName: String!): User!
-	signupEmployee(data: AddEmployeeInput!): Employee!
+	clientSignup(data: ClientCreateInput!): Client!
+	clientSignin(email: String!, password: String!): Client!
+	employeeSignup(data: EmployeeCreateInput!): Employee!
 	signin(email: String!, password: String!): User!
-	signinEmployee(email: String!, password: String!): Employee!
-	requestReset(email: String!): String
-	resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
-	internalPasswordReset(oldPassword: String!, newPassword1: String!, newPassword2: String!): User!
-	signout: String
+	employeeSignin(email: String!, password: String!): Employee!
+	requestReset(email: String!, role: String!): String
+	resetPassword(
+		resetToken: String!
+		password: String!
+		confirmPassword: String!
+		role: String!
+	): User!
+	internalPasswordReset(
+		oldPassword: String!
+		newPassword1: String!
+		newPassword2: String!
+		role: String!
+	): User!
+	signout: SuccessMessage!
 	createLesson(data: LessonCreateInput!): Lesson!
-	bookLesson(lessonId: ID!): Lesson!
+	bookLesson(lessonId: ID!, studentId: ID!): Lesson!
+	createClass(classInfo: ClassCreateInput!): Class!
+	bookClass(classId: ID!, studentId: ID!): Class!
+	createAgeGroup(groupDetails: AgeGroupCreateInput!): AgeGroup!
+	createStudent(studentInfo: StudentCreateInput!): Client
+	addMedical(medicalInfo: MedicalConditionCreateInput!): Student!
+	cancelLesson(lessonId: ID!, studentId: ID!): SuccessMessage!
 }
 
 type Query {
@@ -21,6 +38,12 @@ type Query {
 	classes: [Class]
 	fullSchedule: ClassesAndLessons
 	instructorLessons: [Lesson]
+	instructorClasses: [Class]
+	studentMedical: [MedicalCondition]
+}
+
+type SuccessMessage {
+	message: String!
 }
 
 type ClassesAndLessons {
@@ -54,22 +77,6 @@ type Employee {
 	updatedAt: DateTime!
 }
 
-input AddEmployeeInput {
-	email: String!
-	password: String!
-	phone: String!
-	firstName: String!
-	lastName: String!
-	gender: String!
-	address: String!
-	city: String!
-	state: String!
-	zip: Int!
-	bio: String!
-	imageURL: String!
-	role: [Role!]
-}
-
 type MedicalCondition {
 	id: ID!
 	description: String!
@@ -87,10 +94,10 @@ type Class {
 	capacity: Int!
 	price: Int!
 	day: Day!
-	instructor: Employee! # can there be multiple instructors for a class?
+	instructor: Employee!
 	duration: Int! # 30 45 or 60 min
 	students: [Student]!
-	time: DateTime! # may want to make this one be a string, not sure
+	time: DateTime!
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }
@@ -127,13 +134,13 @@ type Student {
 	classes: [Class!]!
 	lessons: [Lesson!]!
 	gender: Gender!
-	admin: AccountAdmin
-	medical: [MedicalCondition!]! # if we have generic med conditions we can use them for multiple students
+	admin: Client
+	medical: [MedicalCondition]
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }
 
-type AccountAdmin { # for parents since they'll have control over payments, etc.
+type Client {
 	id: ID!
 	email: String!
 	password: String!
@@ -145,13 +152,13 @@ type AccountAdmin { # for parents since they'll have control over payments, etc.
 	state: String!
 	zip: Int!
 	students: [Student!]!
-	stripeId: String # if we use stripe for charges
+	stripeId: String
 	resetToken: String
 	resetTokenExpiry: String
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }
 
-union User = AccountAdmin | Student | Employee
-union Customer = AccountAdmin | Student # makes it so we can find Parents/Children in one single query
+union User = Client | Student | Employee
+union Customer = Client | Student # makes it so we can find Parents/Children in one single query
 union Instruction = Lesson | Class #

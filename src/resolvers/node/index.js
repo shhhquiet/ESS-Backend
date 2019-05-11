@@ -1,6 +1,6 @@
 module.exports = {
 	__resolveType(obj, ctx, info) {
-		console.log(obj)
+		// console.log(obj)
 		return obj.__typename;
 	}
 };
