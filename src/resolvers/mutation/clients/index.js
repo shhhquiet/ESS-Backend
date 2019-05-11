@@ -85,5 +85,15 @@ module.exports = {
 		});
 
 		return updatedClient;
+	},
+	async addMedical(parent, args, { userId, mutation }, info) {
+		if (!userId) throw new Error("c'mon maaaannnn");
+
+		const updatedStudent = await mutation.updateStudent({
+			where: { id: userId },
+			data: { medical: { create: { ...args.medicalInfo } } }
+		});
+
+		return updatedStudent;
 	}
 };

@@ -41,7 +41,7 @@ type Student {
 	lessons: [Lesson!]!
 	gender: Gender!
 	medical: [MedicalCondition!]! # generic medical can be used for multiple students?
-	admin: AccountAdmin @relation(link: INLINE)
+	admin: Client @relation(link: INLINE)
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }

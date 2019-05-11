@@ -26,6 +26,7 @@ type Mutation {
 	bookClass(classId: ID!, studentId: ID!): Class!
 	createAgeGroup(groupDetails: AgeGroupCreateInput!): AgeGroup!
 	createStudent(studentInfo: StudentCreateInput!): Client
+	addMedical(medicalInfo: MedicalConditionCreateInput!): Student!
 }
 
 type Query {
@@ -128,7 +129,7 @@ type Student {
 	classes: [Class!]!
 	lessons: [Lesson!]!
 	gender: Gender!
-	admin: AccountAdmin
+	admin: Client
 	medical: [MedicalCondition]
 	createdAt: DateTime!
 	updatedAt: DateTime!
