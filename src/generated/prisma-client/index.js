@@ -29,7 +29,7 @@ var models = [
     embedded: false
   },
   {
-    name: "AccountAdmin",
+    name: "Client",
     embedded: false
   },
   {
