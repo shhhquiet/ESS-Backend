@@ -1,5 +1,5 @@
 # source: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
-# timestamp: Fri May 10 2019 19:31:46 GMT-0500 (Central Daylight Time)
+# timestamp: Wed Jun 05 2019 23:18:28 GMT-0700 (Pacific Daylight Time)
 
 type AgeGroup implements Node {
   id: ID!
@@ -362,7 +362,7 @@ type Class implements Node {
   instructor: Employee!
   duration: Int!
   students(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
-  time: DateTime!
+  time: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -386,7 +386,7 @@ input ClassCreateInput {
   price: Int!
   day: Day!
   duration: Int!
-  time: DateTime!
+  time: String!
   ageGroup: AgeGroupCreateOneInput!
   instructor: EmployeeCreateOneWithoutClassesInput!
   students: StudentCreateManyWithoutClassesInput
@@ -411,7 +411,7 @@ input ClassCreateWithoutInstructorInput {
   price: Int!
   day: Day!
   duration: Int!
-  time: DateTime!
+  time: String!
   ageGroup: AgeGroupCreateOneInput!
   students: StudentCreateManyWithoutClassesInput
 }
@@ -425,7 +425,7 @@ input ClassCreateWithoutStudentsInput {
   price: Int!
   day: Day!
   duration: Int!
-  time: DateTime!
+  time: String!
   ageGroup: AgeGroupCreateOneInput!
   instructor: EmployeeCreateOneWithoutClassesInput!
 }
@@ -473,7 +473,7 @@ type ClassPreviousValues {
   price: Int!
   day: Day!
   duration: Int!
-  time: DateTime!
+  time: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -693,28 +693,46 @@ input ClassScalarWhereInput {
 
   """All values greater than or equal the given value."""
   duration_gte: Int
-  time: DateTime
+  time: String
 
   """All values that are not equal to given value."""
-  time_not: DateTime
+  time_not: String
 
   """All values that are contained in given list."""
-  time_in: [DateTime!]
+  time_in: [String!]
 
   """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
+  time_not_in: [String!]
 
   """All values less than the given value."""
-  time_lt: DateTime
+  time_lt: String
 
   """All values less than or equal the given value."""
-  time_lte: DateTime
+  time_lte: String
 
   """All values greater than the given value."""
-  time_gt: DateTime
+  time_gt: String
 
   """All values greater than or equal the given value."""
-  time_gte: DateTime
+  time_gte: String
+
+  """All values containing the given string."""
+  time_contains: String
+
+  """All values not containing the given string."""
+  time_not_contains: String
+
+  """All values starting with the given string."""
+  time_starts_with: String
+
+  """All values not starting with the given string."""
+  time_not_starts_with: String
+
+  """All values ending with the given string."""
+  time_ends_with: String
+
+  """All values not ending with the given string."""
+  time_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -808,7 +826,7 @@ input ClassUpdateInput {
   price: Int
   day: Day
   duration: Int
-  time: DateTime
+  time: String
   ageGroup: AgeGroupUpdateOneRequiredInput
   instructor: EmployeeUpdateOneRequiredWithoutClassesInput
   students: StudentUpdateManyWithoutClassesInput
@@ -822,7 +840,7 @@ input ClassUpdateManyDataInput {
   price: Int
   day: Day
   duration: Int
-  time: DateTime
+  time: String
 }
 
 input ClassUpdateManyMutationInput {
@@ -833,7 +851,7 @@ input ClassUpdateManyMutationInput {
   price: Int
   day: Day
   duration: Int
-  time: DateTime
+  time: String
 }
 
 input ClassUpdateManyWithoutInstructorInput {
@@ -873,7 +891,7 @@ input ClassUpdateWithoutInstructorDataInput {
   price: Int
   day: Day
   duration: Int
-  time: DateTime
+  time: String
   ageGroup: AgeGroupUpdateOneRequiredInput
   students: StudentUpdateManyWithoutClassesInput
 }
@@ -886,7 +904,7 @@ input ClassUpdateWithoutStudentsDataInput {
   price: Int
   day: Day
   duration: Int
-  time: DateTime
+  time: String
   ageGroup: AgeGroupUpdateOneRequiredInput
   instructor: EmployeeUpdateOneRequiredWithoutClassesInput
 }
@@ -1128,28 +1146,46 @@ input ClassWhereInput {
 
   """All values greater than or equal the given value."""
   duration_gte: Int
-  time: DateTime
+  time: String
 
   """All values that are not equal to given value."""
-  time_not: DateTime
+  time_not: String
 
   """All values that are contained in given list."""
-  time_in: [DateTime!]
+  time_in: [String!]
 
   """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
+  time_not_in: [String!]
 
   """All values less than the given value."""
-  time_lt: DateTime
+  time_lt: String
 
   """All values less than or equal the given value."""
-  time_lte: DateTime
+  time_lte: String
 
   """All values greater than the given value."""
-  time_gt: DateTime
+  time_gt: String
 
   """All values greater than or equal the given value."""
-  time_gte: DateTime
+  time_gte: String
+
+  """All values containing the given string."""
+  time_contains: String
+
+  """All values not containing the given string."""
+  time_not_contains: String
+
+  """All values starting with the given string."""
+  time_starts_with: String
+
+  """All values not starting with the given string."""
+  time_not_starts_with: String
+
+  """All values ending with the given string."""
+  time_ends_with: String
+
+  """All values not ending with the given string."""
+  time_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
