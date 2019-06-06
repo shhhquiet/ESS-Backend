@@ -112,7 +112,7 @@ type Class {
 	instructor: Employee!
 	duration: Int!
 	students: [Student!]!
-	time: DateTime!
+	time: String!
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
 }
