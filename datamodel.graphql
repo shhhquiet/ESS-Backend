@@ -119,14 +119,12 @@ type Class {
 
 type Lesson {
 	id: ID! @id
-	name: String!
-	description: String!
 	instructor: Employee!
 	client: [Student]
 	duration: Int!
-	type: LessonType!
+	type: LessonType
 	day: Day!
-	time: DateTime!
+	time: String!
 	open: Boolean!
 }
 

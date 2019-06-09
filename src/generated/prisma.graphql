@@ -1,5 +1,5 @@
 # source: https://eastsideswim-16e1c20ddd.herokuapp.com/eastsideswim/dev
-# timestamp: Wed Jun 05 2019 23:18:28 GMT-0700 (Pacific Daylight Time)
+# timestamp: Sun Jun 09 2019 02:52:39 GMT-0700 (Pacific Daylight Time)
 
 type AgeGroup implements Node {
   id: ID!
@@ -3011,14 +3011,12 @@ enum Gender {
 
 type Lesson implements Node {
   id: ID!
-  name: String!
-  description: String!
   instructor: Employee!
   client(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -3034,12 +3032,10 @@ type LessonConnection {
 
 input LessonCreateInput {
   id: ID
-  name: String!
-  description: String!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
   instructor: EmployeeCreateOneWithoutLessonsInput!
   client: StudentCreateManyWithoutLessonsInput
@@ -3057,24 +3053,20 @@ input LessonCreateManyWithoutInstructorInput {
 
 input LessonCreateWithoutClientInput {
   id: ID
-  name: String!
-  description: String!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
   instructor: EmployeeCreateOneWithoutLessonsInput!
 }
 
 input LessonCreateWithoutInstructorInput {
   id: ID
-  name: String!
-  description: String!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
   client: StudentCreateManyWithoutLessonsInput
 }
@@ -3091,10 +3083,6 @@ type LessonEdge {
 enum LessonOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  description_ASC
-  description_DESC
   duration_ASC
   duration_DESC
   type_ASC
@@ -3109,12 +3097,10 @@ enum LessonOrderByInput {
 
 type LessonPreviousValues {
   id: ID!
-  name: String!
-  description: String!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -3167,86 +3153,6 @@ input LessonScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
   duration: Int
 
   """All values that are not equal to given value."""
@@ -3289,28 +3195,46 @@ input LessonScalarWhereInput {
 
   """All values that are not contained in given list."""
   day_not_in: [Day!]
-  time: DateTime
+  time: String
 
   """All values that are not equal to given value."""
-  time_not: DateTime
+  time_not: String
 
   """All values that are contained in given list."""
-  time_in: [DateTime!]
+  time_in: [String!]
 
   """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
+  time_not_in: [String!]
 
   """All values less than the given value."""
-  time_lt: DateTime
+  time_lt: String
 
   """All values less than or equal the given value."""
-  time_lte: DateTime
+  time_lte: String
 
   """All values greater than the given value."""
-  time_gt: DateTime
+  time_gt: String
 
   """All values greater than or equal the given value."""
-  time_gte: DateTime
+  time_gte: String
+
+  """All values containing the given string."""
+  time_contains: String
+
+  """All values not containing the given string."""
+  time_not_contains: String
+
+  """All values starting with the given string."""
+  time_starts_with: String
+
+  """All values not starting with the given string."""
+  time_not_starts_with: String
+
+  """All values ending with the given string."""
+  time_ends_with: String
+
+  """All values not ending with the given string."""
+  time_not_ends_with: String
   open: Boolean
 
   """All values that are not equal to given value."""
@@ -3362,34 +3286,28 @@ enum LessonType {
 }
 
 input LessonUpdateInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
   instructor: EmployeeUpdateOneRequiredWithoutLessonsInput
   client: StudentUpdateManyWithoutLessonsInput
 }
 
 input LessonUpdateManyDataInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
 input LessonUpdateManyMutationInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
@@ -3423,23 +3341,19 @@ input LessonUpdateManyWithWhereNestedInput {
 }
 
 input LessonUpdateWithoutClientDataInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
   instructor: EmployeeUpdateOneRequiredWithoutLessonsInput
 }
 
 input LessonUpdateWithoutInstructorDataInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
   client: StudentUpdateManyWithoutLessonsInput
 }
@@ -3515,86 +3429,6 @@ input LessonWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
   duration: Int
 
   """All values that are not equal to given value."""
@@ -3637,28 +3471,46 @@ input LessonWhereInput {
 
   """All values that are not contained in given list."""
   day_not_in: [Day!]
-  time: DateTime
+  time: String
 
   """All values that are not equal to given value."""
-  time_not: DateTime
+  time_not: String
 
   """All values that are contained in given list."""
-  time_in: [DateTime!]
+  time_in: [String!]
 
   """All values that are not contained in given list."""
-  time_not_in: [DateTime!]
+  time_not_in: [String!]
 
   """All values less than the given value."""
-  time_lt: DateTime
+  time_lt: String
 
   """All values less than or equal the given value."""
-  time_lte: DateTime
+  time_lte: String
 
   """All values greater than the given value."""
-  time_gt: DateTime
+  time_gt: String
 
   """All values greater than or equal the given value."""
-  time_gte: DateTime
+  time_gte: String
+
+  """All values containing the given string."""
+  time_contains: String
+
+  """All values not containing the given string."""
+  time_not_contains: String
+
+  """All values starting with the given string."""
+  time_starts_with: String
+
+  """All values not starting with the given string."""
+  time_not_starts_with: String
+
+  """All values ending with the given string."""
+  time_ends_with: String
+
+  """All values not ending with the given string."""
+  time_not_ends_with: String
   open: Boolean
 
   """All values that are not equal to given value."""
