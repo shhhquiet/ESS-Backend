@@ -1659,14 +1659,12 @@ enum Gender {
 
 type Lesson {
   id: ID!
-  name: String!
-  description: String!
   instructor: Employee!
   client(where: StudentWhereInput, orderBy: StudentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Student!]
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -1678,14 +1676,12 @@ type LessonConnection {
 
 input LessonCreateInput {
   id: ID
-  name: String!
-  description: String!
   instructor: EmployeeCreateOneWithoutLessonsInput!
   client: StudentCreateManyWithoutLessonsInput
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -1701,25 +1697,21 @@ input LessonCreateManyWithoutInstructorInput {
 
 input LessonCreateWithoutClientInput {
   id: ID
-  name: String!
-  description: String!
   instructor: EmployeeCreateOneWithoutLessonsInput!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
 input LessonCreateWithoutInstructorInput {
   id: ID
-  name: String!
-  description: String!
   client: StudentCreateManyWithoutLessonsInput
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -1731,10 +1723,6 @@ type LessonEdge {
 enum LessonOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  description_ASC
-  description_DESC
   duration_ASC
   duration_DESC
   type_ASC
@@ -1749,12 +1737,10 @@ enum LessonOrderByInput {
 
 type LessonPreviousValues {
   id: ID!
-  name: String!
-  description: String!
   duration: Int!
-  type: LessonType!
+  type: LessonType
   day: Day!
-  time: DateTime!
+  time: String!
   open: Boolean!
 }
 
@@ -1773,34 +1759,6 @@ input LessonScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
   duration: Int
   duration_not: Int
   duration_in: [Int!]
@@ -1817,14 +1775,20 @@ input LessonScalarWhereInput {
   day_not: Day
   day_in: [Day!]
   day_not_in: [Day!]
-  time: DateTime
-  time_not: DateTime
-  time_in: [DateTime!]
-  time_not_in: [DateTime!]
-  time_lt: DateTime
-  time_lte: DateTime
-  time_gt: DateTime
-  time_gte: DateTime
+  time: String
+  time_not: String
+  time_in: [String!]
+  time_not_in: [String!]
+  time_lt: String
+  time_lte: String
+  time_gt: String
+  time_gte: String
+  time_contains: String
+  time_not_contains: String
+  time_starts_with: String
+  time_not_starts_with: String
+  time_ends_with: String
+  time_not_ends_with: String
   open: Boolean
   open_not: Boolean
   AND: [LessonScalarWhereInput!]
@@ -1856,34 +1820,28 @@ enum LessonType {
 }
 
 input LessonUpdateInput {
-  name: String
-  description: String
   instructor: EmployeeUpdateOneRequiredWithoutLessonsInput
   client: StudentUpdateManyWithoutLessonsInput
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
 input LessonUpdateManyDataInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
 input LessonUpdateManyMutationInput {
-  name: String
-  description: String
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
@@ -1917,24 +1875,20 @@ input LessonUpdateManyWithWhereNestedInput {
 }
 
 input LessonUpdateWithoutClientDataInput {
-  name: String
-  description: String
   instructor: EmployeeUpdateOneRequiredWithoutLessonsInput
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
 input LessonUpdateWithoutInstructorDataInput {
-  name: String
-  description: String
   client: StudentUpdateManyWithoutLessonsInput
   duration: Int
   type: LessonType
   day: Day
-  time: DateTime
+  time: String
   open: Boolean
 }
 
@@ -1975,34 +1929,6 @@ input LessonWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
   instructor: EmployeeWhereInput
   client_every: StudentWhereInput
   client_some: StudentWhereInput
@@ -2023,14 +1949,20 @@ input LessonWhereInput {
   day_not: Day
   day_in: [Day!]
   day_not_in: [Day!]
-  time: DateTime
-  time_not: DateTime
-  time_in: [DateTime!]
-  time_not_in: [DateTime!]
-  time_lt: DateTime
-  time_lte: DateTime
-  time_gt: DateTime
-  time_gte: DateTime
+  time: String
+  time_not: String
+  time_in: [String!]
+  time_not_in: [String!]
+  time_lt: String
+  time_lte: String
+  time_gt: String
+  time_gte: String
+  time_contains: String
+  time_not_contains: String
+  time_starts_with: String
+  time_not_starts_with: String
+  time_ends_with: String
+  time_not_ends_with: String
   open: Boolean
   open_not: Boolean
   AND: [LessonWhereInput!]

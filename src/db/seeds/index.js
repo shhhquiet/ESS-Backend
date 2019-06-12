@@ -1,11 +1,11 @@
 const { prisma } = require('../index');
-const ageGroups = require('./seedClasses');
+const ageGroups = require('./seedLessons');
 
 const seed = async () => {
 	Promise.all(
 		ageGroups.map(async ageGroup => {
 			try {
-				const seed = await prisma.mutation.createClass({
+				const seed = await prisma.mutation.createLesson({
 					data: {
 						...ageGroup
 					}

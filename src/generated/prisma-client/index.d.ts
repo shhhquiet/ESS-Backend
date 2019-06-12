@@ -417,10 +417,6 @@ export type ClassOrderByInput =
 export type LessonOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "description_ASC"
-  | "description_DESC"
   | "duration_ASC"
   | "duration_DESC"
   | "type_ASC"
@@ -1040,34 +1036,6 @@ export interface LessonWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
   instructor?: EmployeeWhereInput;
   client_every?: StudentWhereInput;
   client_some?: StudentWhereInput;
@@ -1088,14 +1056,20 @@ export interface LessonWhereInput {
   day_not?: Day;
   day_in?: Day[] | Day;
   day_not_in?: Day[] | Day;
-  time?: DateTimeInput;
-  time_not?: DateTimeInput;
-  time_in?: DateTimeInput[] | DateTimeInput;
-  time_not_in?: DateTimeInput[] | DateTimeInput;
-  time_lt?: DateTimeInput;
-  time_lte?: DateTimeInput;
-  time_gt?: DateTimeInput;
-  time_gte?: DateTimeInput;
+  time?: String;
+  time_not?: String;
+  time_in?: String[] | String;
+  time_not_in?: String[] | String;
+  time_lt?: String;
+  time_lte?: String;
+  time_gt?: String;
+  time_gte?: String;
+  time_contains?: String;
+  time_not_contains?: String;
+  time_starts_with?: String;
+  time_not_starts_with?: String;
+  time_ends_with?: String;
+  time_not_ends_with?: String;
   open?: Boolean;
   open_not?: Boolean;
   AND?: LessonWhereInput[] | LessonWhereInput;
@@ -1494,13 +1468,11 @@ export interface LessonCreateManyWithoutClientInput {
 
 export interface LessonCreateWithoutClientInput {
   id?: ID_Input;
-  name: String;
-  description: String;
   instructor: EmployeeCreateOneWithoutLessonsInput;
   duration: Int;
-  type: LessonType;
+  type?: LessonType;
   day: Day;
-  time: DateTimeInput;
+  time: String;
   open: Boolean;
 }
 
@@ -1617,13 +1589,11 @@ export interface LessonCreateManyWithoutInstructorInput {
 
 export interface LessonCreateWithoutInstructorInput {
   id?: ID_Input;
-  name: String;
-  description: String;
   client?: StudentCreateManyWithoutLessonsInput;
   duration: Int;
-  type: LessonType;
+  type?: LessonType;
   day: Day;
-  time: DateTimeInput;
+  time: String;
   open: Boolean;
 }
 
@@ -1940,13 +1910,11 @@ export interface LessonUpdateWithWhereUniqueWithoutClientInput {
 }
 
 export interface LessonUpdateWithoutClientDataInput {
-  name?: String;
-  description?: String;
   instructor?: EmployeeUpdateOneRequiredWithoutLessonsInput;
   duration?: Int;
   type?: LessonType;
   day?: Day;
-  time?: DateTimeInput;
+  time?: String;
   open?: Boolean;
 }
 
@@ -2322,34 +2290,6 @@ export interface LessonScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
   duration?: Int;
   duration_not?: Int;
   duration_in?: Int[] | Int;
@@ -2366,14 +2306,20 @@ export interface LessonScalarWhereInput {
   day_not?: Day;
   day_in?: Day[] | Day;
   day_not_in?: Day[] | Day;
-  time?: DateTimeInput;
-  time_not?: DateTimeInput;
-  time_in?: DateTimeInput[] | DateTimeInput;
-  time_not_in?: DateTimeInput[] | DateTimeInput;
-  time_lt?: DateTimeInput;
-  time_lte?: DateTimeInput;
-  time_gt?: DateTimeInput;
-  time_gte?: DateTimeInput;
+  time?: String;
+  time_not?: String;
+  time_in?: String[] | String;
+  time_not_in?: String[] | String;
+  time_lt?: String;
+  time_lte?: String;
+  time_gt?: String;
+  time_gte?: String;
+  time_contains?: String;
+  time_not_contains?: String;
+  time_starts_with?: String;
+  time_not_starts_with?: String;
+  time_ends_with?: String;
+  time_not_ends_with?: String;
   open?: Boolean;
   open_not?: Boolean;
   AND?: LessonScalarWhereInput[] | LessonScalarWhereInput;
@@ -2387,12 +2333,10 @@ export interface LessonUpdateManyWithWhereNestedInput {
 }
 
 export interface LessonUpdateManyDataInput {
-  name?: String;
-  description?: String;
   duration?: Int;
   type?: LessonType;
   day?: Day;
-  time?: DateTimeInput;
+  time?: String;
   open?: Boolean;
 }
 
@@ -2428,13 +2372,11 @@ export interface LessonUpdateWithWhereUniqueWithoutInstructorInput {
 }
 
 export interface LessonUpdateWithoutInstructorDataInput {
-  name?: String;
-  description?: String;
   client?: StudentUpdateManyWithoutLessonsInput;
   duration?: Int;
   type?: LessonType;
   day?: Day;
-  time?: DateTimeInput;
+  time?: String;
   open?: Boolean;
 }
 
@@ -2679,36 +2621,30 @@ export interface EmployeeUpdateManyMutationInput {
 
 export interface LessonCreateInput {
   id?: ID_Input;
-  name: String;
-  description: String;
   instructor: EmployeeCreateOneWithoutLessonsInput;
   client?: StudentCreateManyWithoutLessonsInput;
   duration: Int;
-  type: LessonType;
+  type?: LessonType;
   day: Day;
-  time: DateTimeInput;
+  time: String;
   open: Boolean;
 }
 
 export interface LessonUpdateInput {
-  name?: String;
-  description?: String;
   instructor?: EmployeeUpdateOneRequiredWithoutLessonsInput;
   client?: StudentUpdateManyWithoutLessonsInput;
   duration?: Int;
   type?: LessonType;
   day?: Day;
-  time?: DateTimeInput;
+  time?: String;
   open?: Boolean;
 }
 
 export interface LessonUpdateManyMutationInput {
-  name?: String;
-  description?: String;
   duration?: Int;
   type?: LessonType;
   day?: Day;
-  time?: DateTimeInput;
+  time?: String;
   open?: Boolean;
 }
 
@@ -3273,19 +3209,15 @@ export interface StudentSubscription
 
 export interface Lesson {
   id: ID_Output;
-  name: String;
-  description: String;
   duration: Int;
-  type: LessonType;
+  type?: LessonType;
   day: Day;
-  time: DateTimeOutput;
+  time: String;
   open: Boolean;
 }
 
 export interface LessonPromise extends Promise<Lesson>, Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
   instructor: <T = EmployeePromise>() => T;
   client: <T = FragmentableArray<Student>>(args?: {
     where?: StudentWhereInput;
@@ -3299,7 +3231,7 @@ export interface LessonPromise extends Promise<Lesson>, Fragmentable {
   duration: () => Promise<Int>;
   type: () => Promise<LessonType>;
   day: () => Promise<Day>;
-  time: () => Promise<DateTimeOutput>;
+  time: () => Promise<String>;
   open: () => Promise<Boolean>;
 }
 
@@ -3307,8 +3239,6 @@ export interface LessonSubscription
   extends Promise<AsyncIterator<Lesson>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
   instructor: <T = EmployeeSubscription>() => T;
   client: <T = Promise<AsyncIterator<StudentSubscription>>>(args?: {
     where?: StudentWhereInput;
@@ -3322,7 +3252,7 @@ export interface LessonSubscription
   duration: () => Promise<AsyncIterator<Int>>;
   type: () => Promise<AsyncIterator<LessonType>>;
   day: () => Promise<AsyncIterator<Day>>;
-  time: () => Promise<AsyncIterator<DateTimeOutput>>;
+  time: () => Promise<AsyncIterator<String>>;
   open: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -4106,12 +4036,10 @@ export interface LessonSubscriptionPayloadSubscription
 
 export interface LessonPreviousValues {
   id: ID_Output;
-  name: String;
-  description: String;
   duration: Int;
-  type: LessonType;
+  type?: LessonType;
   day: Day;
-  time: DateTimeOutput;
+  time: String;
   open: Boolean;
 }
 
@@ -4119,12 +4047,10 @@ export interface LessonPreviousValuesPromise
   extends Promise<LessonPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
   duration: () => Promise<Int>;
   type: () => Promise<LessonType>;
   day: () => Promise<Day>;
-  time: () => Promise<DateTimeOutput>;
+  time: () => Promise<String>;
   open: () => Promise<Boolean>;
 }
 
@@ -4132,12 +4058,10 @@ export interface LessonPreviousValuesSubscription
   extends Promise<AsyncIterator<LessonPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
   duration: () => Promise<AsyncIterator<Int>>;
   type: () => Promise<AsyncIterator<LessonType>>;
   day: () => Promise<AsyncIterator<Day>>;
-  time: () => Promise<AsyncIterator<DateTimeOutput>>;
+  time: () => Promise<AsyncIterator<String>>;
   open: () => Promise<AsyncIterator<Boolean>>;
 }
 
