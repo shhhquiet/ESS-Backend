@@ -37,6 +37,14 @@ var models = [
     embedded: false
   },
   {
+    name: "Message",
+    embedded: false
+  },
+  {
+    name: "MessageTag",
+    embedded: false
+  },
+  {
     name: "MedicalCondition",
     embedded: false
   },

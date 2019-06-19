@@ -20,6 +20,7 @@ type Mutation {
 		role: String!
 	): User!
 	signout: SuccessMessage!
+	createMessage(text: String!, title: String!): Message!
 	createLesson(data: LessonCreateInput!): Lesson!
 	bookLesson(lessonId: ID!, studentId: ID!): Lesson!
 	createClass(classInfo: ClassCreateInput!): Class!
@@ -73,9 +74,31 @@ type Employee {
 	lessons: [Lesson]
 	lessonSinglePrice: Int
 	lessonDoublePrice: Int
+	createdMessages: [Message]
+	taggedMessages: [Message]
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }
+
+type Message {
+	id: ID!
+	title: String!
+	text: String!
+	author: Employee! 
+	parent: Message 
+	taggedEmployees: [Employee]! 
+	tags: [MessageTag]!
+	comments: [Message]! 
+	createdAt: DateTime!
+	updatedAt: DateTime! 
+}
+
+type MessageTag {
+	id: ID! 
+	tag: String!
+	messages: [Message]!
+}
+
 
 type MedicalCondition {
 	id: ID!

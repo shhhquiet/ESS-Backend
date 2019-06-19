@@ -88,8 +88,29 @@ type Employee {
 	lessons: [Lesson!]!
 	lessonSinglePrice: Int
 	lessonDoublePrice: Int
+	createdMessages: [Message!]! @relation(link: TABLE, name: "MessageAuthorRelation")
+	taggedMessages: [Message!]! @relation(link: TABLE, name: "TaggedRelation")
 	createdAt: DateTime! @createdAt
 	updatedAt: DateTime! @updatedAt
+}
+
+type Message {
+	id: ID! @id
+	title: String!
+	text: String!
+	author: Employee! @relation(name: "MessageAuthorRelation")
+	parent: Message @relation(name: "ParentMessageRelation")
+	taggedEmployees: [Employee!]! @relation(name: "TaggedRelation")
+	tags: [MessageTag!]!
+	comments: [Message!]! @relation(name: "CommentsRelation")
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+}
+
+type MessageTag {
+	id: ID! @id 
+	tag: String!
+	messages: [Message!]!
 }
 
 type MedicalCondition {
@@ -120,7 +141,7 @@ type Class {
 type Lesson {
 	id: ID! @id
 	instructor: Employee!
-	client: [Student]
+	client: [Student!]!
 	duration: Int!
 	type: LessonType
 	day: Day!
