@@ -8,7 +8,8 @@ module.exports = {
 	employees: forwardTo('prisma'),
 	lessons: forwardTo('prisma'),
 	classes: forwardTo('prisma'),
-
+	messages: forwardTo('prisma'),
+	
 	...EmployeeQueries,
 	...ClientQueries,
 
