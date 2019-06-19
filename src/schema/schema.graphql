@@ -37,10 +37,12 @@ type Query {
 	currentUser: User
 	lessons: [Lesson]
 	classes: [Class]
+	messages: [Message]
 	fullSchedule: ClassesAndLessons
 	instructorLessons: [Lesson]
 	instructorClasses: [Class]
 	studentMedical: [MedicalCondition]
+
 }
 
 type SuccessMessage {
