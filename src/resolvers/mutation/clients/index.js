@@ -2,16 +2,16 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 module.exports = {
-	async clientSignup(parent, args, { mutation, res }, info) {
-		args.email = args.email.toLowerCase();
-		if (!/^(?=.*\d).{8,}$/.test(args.password))
+	async clientSignup(parent, {data}, { mutation, res }, info) {
+		data.email = data.email.toLowerCase();
+		if (!/^(?=.*\d).{8,}$/.test(data.password))
 			throw new Error('Password must be 8 characters with at least 1 number!');
 
-		const password = await bcrypt.hash(args.password, 10);
+		const password = await bcrypt.hash(data.password, 10);
 		const user = await mutation.createClient(
 			{
 				data: {
-					...args.data,
+					...data,
 					password
 				}
 			},
