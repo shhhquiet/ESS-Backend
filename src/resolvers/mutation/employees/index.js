@@ -65,6 +65,18 @@ module.exports = {
 
 		return lesson;
 	},
+	async createMessage(parent, args, {userId, mutation}, info) {
+		if (!userId) throw new Error('hey staaahp');
+
+		const message = await mutation.createMessage({
+			data: {
+			...args,
+			author: {connect: {id: userId}}
+			}
+		}, info)
+		
+		return message;
+	},
 	async createClass(parent, args, { userId, mutation }, info) {
 		// for instructors to make a class listing
 		if (!userId) throw new Error("c'mon maaaannnn");

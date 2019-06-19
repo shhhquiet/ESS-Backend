@@ -31,7 +31,6 @@ const userObject = `{
     }
     lessons {
       id
-      name
       duration
       type
       day
@@ -89,7 +88,7 @@ module.exports = {
 
 		try {
 			const user = await prisma.query.node({ id }, userObject);
-			console.log(user, 'user here');
+			
 			req.user = user;
 		} catch (e) {
 			console.log(e);
